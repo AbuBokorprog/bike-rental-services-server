@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import router from '.';
-// import { StudentRoutes } from './modules/students/student.route';
+import { globalError } from './middleware/global.error';
+import { notfoundError } from './middleware/not.found.error';
 const app: Application = express();
 
 app.use(express.json());
@@ -12,32 +12,14 @@ app.use(cors());
 
 // application routes
 
-app.use(router);
-
 app.get('/', (req: Request, res: Response) => {
   res.send('Project setup home page');
 });
 
 // global error
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const status = 500;
-  const message = err.message || 'Something went wrong!';
-
-  return res.status(status).json({
-    success: false,
-    message: message,
-    error: err,
-  });
-});
+app.use(globalError);
 
 // notfound route handler
-app.use((req: Request, res: Response, next: NextFunction) => {
-  return res.status(400).json({
-    success: false,
-    message: 'API not found',
-    error: '',
-  });
-});
+app.use(notfoundError);
 
 export default app;
