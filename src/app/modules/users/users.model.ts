@@ -28,4 +28,17 @@ const signInSchema = new Schema<TUsersSignIn>({
   },
 });
 
-export const userSignIn = model('sign-in', signInSchema);
+const loginSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
+const userSignIn = model('sign-in', signInSchema);
+const userLogin = model('login', loginSchema);
+export { userLogin, userSignIn };

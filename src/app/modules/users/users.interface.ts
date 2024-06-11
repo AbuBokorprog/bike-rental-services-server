@@ -6,3 +6,8 @@ export interface TUsersSignIn {
   address: string;
   role: 'admin' | 'user';
 }
+
+export interface TUserLogin {
+  email: string;
+  password: string;
+}

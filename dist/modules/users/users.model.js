@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userSignIn = void 0;
+exports.userSignIn = exports.userLogin = void 0;
 const mongoose_1 = require("mongoose");
 const signInSchema = new mongoose_1.Schema({
     name: {
@@ -28,4 +28,17 @@ const signInSchema = new mongoose_1.Schema({
         default: 'user',
     },
 });
-exports.userSignIn = (0, mongoose_1.model)('sign-in', signInSchema);
+const loginSchema = new mongoose_1.Schema({
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+});
+const userSignIn = (0, mongoose_1.model)('sign-in', signInSchema);
+exports.userSignIn = userSignIn;
+const userLogin = (0, mongoose_1.model)('login', loginSchema);
+exports.userLogin = userLogin;
