@@ -45,7 +45,7 @@ const returnBike = async (id: string) => {
     { isAvailable: true },
     { new: true, runValidators: true },
   );
-  console.log(isAvailableUpdate, updateRental);
+
   return updateRental;
 };
 

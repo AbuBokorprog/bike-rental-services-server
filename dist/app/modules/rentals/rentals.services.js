@@ -25,7 +25,6 @@ const returnBike = async (id) => {
     const totalCost = (Number(differenceInHours) * Number(pricePerHour)).toFixed(2);
     const updateRental = await rentals_model_1.rentals.findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true }, { new: true, runValidators: true });
     const isAvailableUpdate = await bike_model_1.Bike.findByIdAndUpdate(currentRentals?.bikeId, { isAvailable: true }, { new: true, runValidators: true });
-    console.log(isAvailableUpdate, updateRental);
     return updateRental;
 };
 const getAllRentals = async () => {
