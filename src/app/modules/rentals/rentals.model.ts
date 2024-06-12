@@ -5,12 +5,12 @@ const rentalsSchema = new Schema<TRentals>({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'user',
+    ref: 'User',
   },
   bikeId: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'bike',
+    ref: 'Bike',
   },
   startTime: {
     type: Date,
@@ -22,6 +22,7 @@ const rentalsSchema = new Schema<TRentals>({
   },
   totalCost: {
     type: Number,
+    default: 0,
   },
   isReturned: {
     type: Boolean,
@@ -29,4 +30,4 @@ const rentalsSchema = new Schema<TRentals>({
   },
 });
 
-export const rentals = model('rentals', rentalsSchema);
+export const rentals = model('Rental', rentalsSchema);

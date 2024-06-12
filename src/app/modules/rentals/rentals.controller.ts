@@ -6,7 +6,6 @@ const createRental = catchAsync(async (req, res) => {
   const { body } = req.body;
 
   const data = await rentalsServices.createRentals(body);
-
   successResponse(res, {
     statusCode: 200,
     success: true,
@@ -21,15 +20,15 @@ const getAllRentals = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'create rentals successfully!',
+    message: 'Retrieve rentals successfully!',
     data,
   });
 });
 
 const returnBike = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { body } = req.body;
-  const data = await rentalsServices.returnBike(id, body);
+
+  const data = await rentalsServices.returnBike(id);
 
   successResponse(res, {
     statusCode: 200,

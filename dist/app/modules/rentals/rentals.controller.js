@@ -22,14 +22,13 @@ const getAllRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'create rentals successfully!',
+        message: 'Retrieve rentals successfully!',
         data,
     });
 });
 const returnBike = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;
-    const { body } = req.body;
-    const data = await rentals_services_1.rentalsServices.returnBike(id, body);
+    const data = await rentals_services_1.rentalsServices.returnBike(id);
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,

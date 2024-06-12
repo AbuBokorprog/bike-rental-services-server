@@ -6,12 +6,12 @@ const rentalsSchema = new mongoose_1.Schema({
     userId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'user',
+        ref: 'User',
     },
     bikeId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'bike',
+        ref: 'Bike',
     },
     startTime: {
         type: Date,
@@ -23,10 +23,11 @@ const rentalsSchema = new mongoose_1.Schema({
     },
     totalCost: {
         type: Number,
+        default: 0,
     },
     isReturned: {
         type: Boolean,
         default: false,
     },
 });
-exports.rentals = (0, mongoose_1.model)('rentals', rentalsSchema);
+exports.rentals = (0, mongoose_1.model)('Rental', rentalsSchema);

@@ -36,4 +36,4 @@ const BikeSchema = new Schema<TBike>({
   },
 });
 
-export const Bike = model('bike', BikeSchema);
+export const Bike = model('Bike', BikeSchema);
