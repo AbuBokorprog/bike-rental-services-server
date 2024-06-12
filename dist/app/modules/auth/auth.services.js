@@ -18,7 +18,6 @@ const loginUser = async (payload) => {
         throw new Error('The user is not found');
     }
     const isPasswordMatched = await bcrypt_1.default.compare(payload.password, userExist.password);
-    console.log(isPasswordMatched);
     if (!isPasswordMatched) {
         throw new AppError_1.AppError(500, 'Password incorrect!');
     }

@@ -13,13 +13,13 @@ const retrieveAllBikes = async (query: any) => {
 };
 
 const updateBikes = async (id: string, payload: Partial<TBike>) => {
-  const data = await Bike.findByIdAndUpdate(
-    id,
-    { payload },
-    { new: true, runValidators: true },
-  );
+  const data = await Bike.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
   return data;
 };
+
 const deleteBikes = async (id: string) => {
   const data = await Bike.findByIdAndDelete(id);
   return data;

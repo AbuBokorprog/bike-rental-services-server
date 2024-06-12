@@ -12,7 +12,10 @@ const retrieveAllBikes = async (query) => {
     return data;
 };
 const updateBikes = async (id, payload) => {
-    const data = await bike_model_1.Bike.findByIdAndUpdate(id, { payload }, { new: true, runValidators: true });
+    const data = await bike_model_1.Bike.findByIdAndUpdate(id, payload, {
+        new: true,
+        runValidators: true,
+    });
     return data;
 };
 const deleteBikes = async (id) => {

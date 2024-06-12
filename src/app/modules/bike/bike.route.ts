@@ -21,6 +21,6 @@ route.put(
   bikeControllers.updateBike,
 );
 
-route.delete('/id', bikeControllers.deleteBike);
+route.delete('/:id', bikeControllers.deleteBike);
 
 export const bikeRouter = route;

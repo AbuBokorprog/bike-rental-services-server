@@ -22,8 +22,6 @@ const loginUser = async (payload: TUserLogin) => {
     userExist.password,
   );
 
-  console.log(isPasswordMatched);
-
   if (!isPasswordMatched) {
     throw new AppError(500, 'Password incorrect!');
   }
