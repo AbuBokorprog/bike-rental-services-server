@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { globalError } from './middleware/global.error';
-import { notfoundError } from './middleware/not.found.error';
+import { globalError } from './app/middleware/global.error';
+import { notfoundError } from './app/middleware/not.found.error';
+import router from './app/router';
 const app: Application = express();
 
 app.use(express.json());
 app.use(cors());
 
 // application routes
+
+app.use('/api', router);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Project setup home page');

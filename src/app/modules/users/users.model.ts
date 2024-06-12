@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { TUsersSignIn } from './users.interface';
+import { TUser } from './users.interface';
 
-const signInSchema = new Schema<TUsersSignIn>({
+const userSchema = new Schema<TUser>({
   name: {
     type: String,
     required: true,
@@ -28,17 +28,17 @@ const signInSchema = new Schema<TUsersSignIn>({
   },
 });
 
-const loginSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+// const loginSchema = new Schema({
+//   email: {
+//     type: String,
+//     required: true,
+//   },
+//   password: {
+//     type: String,
+//     required: true,
+//   },
+// });
 
-const userSignIn = model('sign-in', signInSchema);
-const userLogin = model('login', loginSchema);
-export { userLogin, userSignIn };
+export const userModel = model<TUser>('user', userSchema);
+// const userLogin = model('login', loginSchema);
+// export { userLogin, userSignIn };

@@ -1,26 +1,16 @@
-import { TUserLogin, TUsersSignIn } from './users.interface';
-import { userLogin, userSignIn } from './users.model';
-
-const signUpUser = async (payload: TUsersSignIn) => {
-  const result = await userSignIn.create(payload);
-  return result;
-};
-
-const loginUser = async (payload: TUserLogin) => {
-  const result = await userLogin.create(payload);
-  return result;
-};
+import { TUser } from './users.interface';
+import { userModel } from './users.model';
 
 const retrieveAllUsers = async () => {
-  const result = await userSignIn.find();
+  const result = await userModel.find();
   return result;
 };
 
 const updateProfile = async (
   id: Record<string, unknown>,
-  payload: Partial<TUsersSignIn>,
+  payload: Partial<TUser>,
 ) => {
-  const result = await userSignIn.findByIdAndUpdate(
+  const result = await userModel.findByIdAndUpdate(
     id,
     { payload },
     { new: true, runValidators: true },
@@ -30,8 +20,6 @@ const updateProfile = async (
 };
 
 export const userServices = {
-  signUpUser,
-  loginUser,
   retrieveAllUsers,
   updateProfile,
 };

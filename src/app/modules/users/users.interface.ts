@@ -1,4 +1,4 @@
-export interface TUsersSignIn {
+export interface TUser {
   name: string;
   email: string;
   password: string;
@@ -6,8 +6,4 @@ export interface TUsersSignIn {
   address: string;
   role: 'admin' | 'user';
 }
-
-export interface TUserLogin {
-  email: string;
-  password: string;
-}
+//
