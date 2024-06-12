@@ -19,6 +19,7 @@ const rentalsSchema = new mongoose_1.Schema({
     },
     returnTime: {
         type: Date,
+        default: null,
     },
     totalCost: {
         type: Number,

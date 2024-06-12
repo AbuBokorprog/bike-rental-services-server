@@ -18,6 +18,7 @@ const rentalsSchema = new Schema<TRentals>({
   },
   returnTime: {
     type: Date,
+    default: null,
   },
   totalCost: {
     type: Number,
