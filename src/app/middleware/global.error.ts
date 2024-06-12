@@ -1,4 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+import { ZodError } from 'zod';
+import { zodErrorHandler } from '../errors/zodErrorHandler';
+import { TErrorMessages } from '../errors/error';
+import config from '../config';
+import { mongooseValidationError } from '../errors/mongooseValidation';
+import { duplicateErrorHandler } from '../errors/duplicateErrorHandler';
+import { AppError } from '../errors/AppError';
 
 export const globalError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,13 +15,63 @@ export const globalError = (
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  const status = 500;
+  let statusCode = 500;
 
-  const message = err.message || 'Something went wrong!';
+  let message = err.message || 'Something went wrong!';
 
-  return res.status(status).json({
+  let errorMessages: TErrorMessages = [
+    {
+      path: '',
+      message: message,
+    },
+  ];
+
+  if (err instanceof ZodError) {
+    const simplifiedError = zodErrorHandler(err);
+
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (err.name === 'ValidationError') {
+    const simplified = mongooseValidationError(err);
+
+    statusCode = simplified.statusCode;
+    message = simplified.message;
+    errorMessages = simplified.errorMessages;
+  } else if (err.name === 'CastError') {
+    const simplified = mongooseValidationError(err);
+
+    statusCode = simplified.statusCode;
+    message = simplified.message;
+    errorMessages = simplified.errorMessages;
+  } else if (err.code === 11000) {
+    // mongoose duplicate error handler
+    const simplifyMongooseError = duplicateErrorHandler(err);
+    statusCode = simplifyMongooseError?.statusCode;
+    message = simplifyMongooseError?.message;
+    errorMessages = simplifyMongooseError?.errorMessages;
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorMessages = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err?.message;
+    errorMessages = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
+  }
+  return res.status(statusCode).json({
     success: false,
     message: message,
-    error: err,
+    errorMessages,
+    stack: config.node_ENV === 'development' ? err?.stack : null,
   });
 };

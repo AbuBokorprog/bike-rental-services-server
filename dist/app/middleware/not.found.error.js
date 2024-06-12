@@ -6,8 +6,8 @@ const notfoundError = (req, res,
 next) => {
     return res.status(404).json({
         success: false,
-        message: 'Not found!',
-        error: '',
+        statusCode: 404,
+        message: 'Not Found!',
     });
 };
 exports.notfoundError = notfoundError;

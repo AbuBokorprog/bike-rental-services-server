@@ -8,7 +8,7 @@ export const notfoundError = (
 ) => {
   return res.status(404).json({
     success: false,
-    message: 'Not found!',
-    error: '',
+    statusCode: 404,
+    message: 'Not Found!',
   });
 };
