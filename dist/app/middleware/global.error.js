@@ -48,7 +48,8 @@ next) => {
         message = simplifyMongooseError?.message;
         errorMessages = simplifyMongooseError?.errorMessages;
     }
-    else if (err instanceof Error) {
+    else if (err instanceof AppError_1.AppError) {
+        statusCode = err.statusCode;
         message = err?.message;
         errorMessages = [
             {
@@ -57,8 +58,7 @@ next) => {
             },
         ];
     }
-    else if (err instanceof AppError_1.AppError) {
-        statusCode = err.statusCode;
+    else if (err instanceof Error) {
         message = err?.message;
         errorMessages = [
             {

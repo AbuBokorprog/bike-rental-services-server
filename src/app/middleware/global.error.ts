@@ -34,13 +34,11 @@ export const globalError = (
     errorMessages = simplifiedError.errorMessages;
   } else if (err.name === 'ValidationError') {
     const simplified = mongooseValidationError(err);
-
     statusCode = simplified.statusCode;
     message = simplified.message;
     errorMessages = simplified.errorMessages;
   } else if (err.name === 'CastError') {
     const simplified = mongooseValidationError(err);
-
     statusCode = simplified.statusCode;
     message = simplified.message;
     errorMessages = simplified.errorMessages;
@@ -50,14 +48,6 @@ export const globalError = (
     statusCode = simplifyMongooseError?.statusCode;
     message = simplifyMongooseError?.message;
     errorMessages = simplifyMongooseError?.errorMessages;
-  } else if (err instanceof Error) {
-    message = err?.message;
-    errorMessages = [
-      {
-        path: '',
-        message: err?.message,
-      },
-    ];
   } else if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err?.message;
@@ -67,7 +57,16 @@ export const globalError = (
         message: err?.message,
       },
     ];
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorMessages = [
+      {
+        path: '',
+        message: err?.message,
+      },
+    ];
   }
+
   return res.status(statusCode).json({
     success: false,
     message: message,

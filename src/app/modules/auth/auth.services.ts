@@ -1,7 +1,8 @@
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { userModel } from './../users/users.model';
 import { TUser } from '../users/users.interface';
 import { TUserLogin } from './auth.interface';
+import { AppError } from '../../errors/AppError';
 
 const signUpUser = async (payload: TUser) => {
   const result = await userModel.create(payload);
@@ -16,12 +17,17 @@ const loginUser = async (payload: TUserLogin) => {
     throw new Error('The user is not found');
   }
 
-  // const isPasswordMatched = bcrypt.compare(
-  //   payload.password,
-  //   userExist.password,
-  // );
+  const isPasswordMatched = await bcrypt.compare(
+    payload.password,
+    userExist.password,
+  );
 
-  // return isPasswordMatched;
+  console.log(isPasswordMatched);
+
+  if (!isPasswordMatched) {
+    throw new AppError(500, 'Password incorrect!');
+  }
+  return isPasswordMatched;
 };
 
 export const authServices = { signUpUser, loginUser };
