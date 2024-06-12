@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const auth_route_1 = require("../modules/auth/auth.route");
 const users_route_1 = require("../modules/users/users.route");
 const bike_route_1 = require("../modules/bike/bike.route");
+const rentals_route_1 = require("../modules/rentals/rentals.route");
 const router = express_1.default.Router();
 const moduleRoute = [
     {
@@ -20,6 +21,10 @@ const moduleRoute = [
     {
         path: '/bikes',
         route: bike_route_1.bikeRouter,
+    },
+    {
+        path: '/rentals',
+        route: rentals_route_1.rentalsRoute,
     },
 ];
 moduleRoute.forEach((r) => router.use(r.path, r.route));
