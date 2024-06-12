@@ -1,12 +1,35 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rentalsServices = void 0;
+const mongoose_1 = require("mongoose");
+const http_status_1 = __importDefault(require("http-status"));
 const bike_model_1 = require("../bike/bike.model");
 const rentals_model_1 = require("./rentals.model");
+const AppError_1 = require("../../errors/AppError");
 const createRentals = async (payload) => {
-    const data = await rentals_model_1.rentals.create(payload);
-    const updateBike = await bike_model_1.Bike.findByIdAndUpdate(payload.bikeId, { isAvailable: false }, { new: true, runValidators: true });
-    return data;
+    const session = await (0, mongoose_1.startSession)();
+    try {
+        session.startTransaction();
+        const data = await rentals_model_1.rentals.create([payload], { session });
+        if (!data) {
+            throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental created failed!');
+        }
+        const updateBike = await bike_model_1.Bike.findByIdAndUpdate(payload.bikeId, { isAvailable: false }, { new: true, runValidators: true, session });
+        if (!updateBike) {
+            throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Bike not found!');
+        }
+        await session.commitTransaction();
+        session.endSession();
+        return data;
+    }
+    catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental create failed!');
+    }
 };
 const returnBike = async (id) => {
     // find current rentals
