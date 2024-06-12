@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { userServices } from './users.service';
-import successResponse from '../../utils/successRespon';
+import successResponse from '../../utils/successResponse';
 
 const retrieveAllUsers = async (
   req: Request,

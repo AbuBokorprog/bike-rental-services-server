@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export const globalError = async (
+export const globalError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   err: any,
   req: Request,
@@ -10,9 +10,9 @@ export const globalError = async (
 ) => {
   const status = 500;
 
-  const message = err?.message || 'Something went wrong!';
+  const message = err.message || 'Something went wrong!';
 
-  res.send(status).json({
+  return res.status(status).json({
     success: false,
     message: message,
     error: err,

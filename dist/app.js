@@ -17,7 +17,7 @@ app.use((0, cors_1.default)());
 // application routes
 app.use('/api', router_1.default);
 app.get('/', (req, res) => {
-    res.send('Project setup home page');
+    res.send('This is bike rental services');
 });
 // global error
 app.use(global_error_1.globalError);

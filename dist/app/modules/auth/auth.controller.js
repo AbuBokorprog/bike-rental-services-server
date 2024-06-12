@@ -4,36 +4,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
-const successRespon_1 = __importDefault(require("../../utils/successRespon"));
 const auth_services_1 = require("./auth.services");
-const signUpUser = async (req, res, next) => {
-    const userData = req.body;
-    try {
-        const data = await auth_services_1.authServices.signUpUser(userData);
-        (0, successRespon_1.default)(res, {
-            statusCode: 200,
-            success: true,
-            message: 'Sign up successfully!',
-            data,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-};
-const loginUser = async (req, res, next) => {
-    const userData = req.body;
-    try {
-        const data = await auth_services_1.authServices.loginUser(userData);
-        (0, successRespon_1.default)(res, {
-            statusCode: 200,
-            success: true,
-            message: 'User login successfully!',
-            data,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-};
+const catch_async_1 = require("../../utils/catch.async");
+const successResponse_1 = __importDefault(require("../../utils/successResponse"));
+const signUpUser = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { body } = req.body;
+    const data = await auth_services_1.authServices.signUpUser(body);
+    (0, successResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Sign up successfully!',
+        data,
+    });
+});
+const loginUser = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { body } = req.body;
+    const data = await auth_services_1.authServices.loginUser(body);
+    (0, successResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User login successfully!',
+        data,
+    });
+});
 exports.authController = { signUpUser, loginUser };

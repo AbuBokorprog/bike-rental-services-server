@@ -6,7 +6,7 @@ export const notfoundError = (
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  res.status(404).json({
+  return res.status(404).json({
     success: false,
     message: 'Not found!',
     error: '',
