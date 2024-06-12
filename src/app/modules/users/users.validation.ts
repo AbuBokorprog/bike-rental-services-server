@@ -14,10 +14,7 @@ export const createUserSignInValidationSchema = z.object({
 export const updateUserSignInValidationSchema = z.object({
   body: z.object({
     name: z.string().optional(),
-    email: z.string().optional(),
-    password: z.string().optional(),
     phone: z.number().optional(),
     address: z.string().optional(),
-    role: z.enum(['admin', 'user']).optional(),
   }),
 });

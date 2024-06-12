@@ -5,4 +5,3 @@ const route = express.Router();
 route.get('/me');
 route.put('/:me', userControllers.updateSingleUser);
 export const userRouter = route;
-//

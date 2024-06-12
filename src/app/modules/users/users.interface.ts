@@ -6,4 +6,3 @@ export interface TUser {
   address: string;
   role: 'admin' | 'user';
 }
-//

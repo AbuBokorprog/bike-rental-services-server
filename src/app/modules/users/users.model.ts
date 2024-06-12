@@ -28,17 +28,4 @@ const userSchema = new Schema<TUser>({
   },
 });
 
-// const loginSchema = new Schema({
-//   email: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
 export const userModel = model<TUser>('user', userSchema);
-// const userLogin = model('login', loginSchema);
-// export { userLogin, userSignIn };

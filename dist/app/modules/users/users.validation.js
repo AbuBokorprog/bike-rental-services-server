@@ -15,10 +15,7 @@ exports.createUserSignInValidationSchema = zod_1.z.object({
 exports.updateUserSignInValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z.string().optional(),
-        email: zod_1.z.string().optional(),
-        password: zod_1.z.string().optional(),
         phone: zod_1.z.number().optional(),
         address: zod_1.z.string().optional(),
-        role: zod_1.z.enum(['admin', 'user']).optional(),
     }),
 });

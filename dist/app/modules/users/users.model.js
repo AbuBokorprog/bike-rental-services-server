@@ -28,16 +28,4 @@ const userSchema = new mongoose_1.Schema({
         default: 'user',
     },
 });
-// const loginSchema = new Schema({
-//   email: {
-//     type: String,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     required: true,
-//   },
-// });
 exports.userModel = (0, mongoose_1.model)('user', userSchema);
-// const userLogin = model('login', loginSchema);
-// export { userLogin, userSignIn };

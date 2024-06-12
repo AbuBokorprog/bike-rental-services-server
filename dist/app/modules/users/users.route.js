@@ -10,4 +10,3 @@ const route = express_1.default.Router();
 route.get('/me');
 route.put('/:me', users_controller_1.userControllers.updateSingleUser);
 exports.userRouter = route;
-//
