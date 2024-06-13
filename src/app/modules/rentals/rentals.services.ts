@@ -10,7 +10,9 @@ const createRentals = async (payload: TRentals) => {
 
   try {
     session.startTransaction();
+
     const data = await rentals.create([payload], { session });
+
     if (!data) {
       throw new AppError(status.BAD_REQUEST, 'Rental created failed!');
     }
@@ -38,8 +40,16 @@ const returnBike = async (id: string) => {
   const currentRentals = await rentals.findById(id);
   const bikeId = currentRentals?.bikeId;
 
+  if (!currentRentals) {
+    throw new AppError(status.NOT_FOUND, 'Rental is no found!');
+  }
+
   //   find bike by id
   const rentalsBike = await Bike.findById(bikeId);
+
+  if (!rentalsBike) {
+    throw new AppError(status.NOT_FOUND, 'Bike is no found!');
+  }
 
   const pricePerHour = rentalsBike?.pricePerHour;
   const startTime = new Date(currentRentals?.startTime as Date);
@@ -55,19 +65,41 @@ const returnBike = async (id: string) => {
     2,
   );
 
-  const updateRental = await rentals.findByIdAndUpdate(
-    id,
-    { returnTime, totalCost, isReturned: true },
-    { new: true, runValidators: true },
-  );
+  const session = await startSession();
 
-  const isAvailableUpdate = await Bike.findByIdAndUpdate(
-    currentRentals?.bikeId,
-    { isAvailable: true },
-    { new: true, runValidators: true },
-  );
+  try {
+    const updateRental = await rentals.findByIdAndUpdate(
+      id,
+      { returnTime, totalCost, isReturned: true },
+      { new: true, runValidators: true, session },
+    );
 
-  return updateRental;
+    if (!updateRental) {
+      throw new AppError(status.BAD_REQUEST, 'Rental update failed!');
+    }
+
+    const isAvailableUpdate = await Bike.findByIdAndUpdate(
+      currentRentals?.bikeId,
+      { isAvailable: true },
+      { new: true, runValidators: true, session },
+    );
+
+    if (!isAvailableUpdate) {
+      throw new AppError(
+        status.BAD_REQUEST,
+        'Bike availability update failed!',
+      );
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return updateRental;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new AppError(status.BAD_REQUEST, 'Return rental failed!');
+  }
 };
 
 const getAllRentals = async () => {
