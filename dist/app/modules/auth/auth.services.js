@@ -24,7 +24,10 @@ const loginUser = async (payload) => {
     if (!isPasswordMatched) {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Password incorrect!');
     }
-    const tokenPayload = { email: payload.email, role: userExist.role };
+    const tokenPayload = {
+        email: payload.email,
+        role: userExist.role,
+    };
     // JWT_SECRET = 7062276ef88f2fcb96f784c05932a9b700f6188954e2f75dfd62eb7f3fce26b4
     const accessToken = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.jwt_secret, {
         expiresIn: config_1.default.expires_in,

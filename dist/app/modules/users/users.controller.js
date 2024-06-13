@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
 const users_service_1 = require("./users.service");
 const successResponse_1 = __importDefault(require("../../utils/successResponse"));
-const retrieveAllUsers = async (req, res, next) => {
-    const data = await users_service_1.userServices.retrieveAllUsers();
+const retrieveUser = async (req, res, next) => {
+    const userEmail = req.user;
+    const data = await users_service_1.userServices.retrieveAllUsers(userEmail);
     try {
         (0, successResponse_1.default)(res, {
             statusCode: 200,
@@ -21,10 +22,10 @@ const retrieveAllUsers = async (req, res, next) => {
     }
 };
 const updateSingleUser = async (req, res, next) => {
-    const id = req.query;
+    const userEmail = req.user;
     const newData = req.body;
     try {
-        const data = await users_service_1.userServices.updateProfile(id, newData);
+        const data = await users_service_1.userServices.updateProfile(userEmail, newData);
         (0, successResponse_1.default)(res, {
             statusCode: 200,
             success: true,
@@ -37,6 +38,6 @@ const updateSingleUser = async (req, res, next) => {
     }
 };
 exports.userControllers = {
-    retrieveAllUsers,
+    retrieveUser,
     updateSingleUser,
 };

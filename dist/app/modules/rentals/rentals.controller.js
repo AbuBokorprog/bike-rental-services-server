@@ -18,7 +18,8 @@ const createRental = (0, catch_async_1.catchAsync)(async (req, res) => {
     });
 });
 const getAllRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
-    const data = await rentals_services_1.rentalsServices.getAllRentals();
+    const userEmail = req.user;
+    const data = await rentals_services_1.rentalsServices.getAllRentals(userEmail, req.query);
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,

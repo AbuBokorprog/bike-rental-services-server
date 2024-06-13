@@ -72,8 +72,12 @@ const returnBike = async (id) => {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Return rental failed!');
     }
 };
-const getAllRentals = async () => {
-    const data = await rentals_model_1.rentals.find();
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+const getAllRentals = async (email, query) => {
+    const data = await rentals_model_1.rentals.find({ email: email });
+    if (!data) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Not Data Found!');
+    }
     return data;
 };
 exports.rentalsServices = { createRentals, returnBike, getAllRentals };
