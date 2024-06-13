@@ -17,15 +17,14 @@ const createRental = catchAsync(async (req, res) => {
 
 const getAllRentals = catchAsync(async (req, res) => {
   const user = req.user;
-  console.log(user);
-  // const data = await rentalsServices.retrieveRentals(user?.email);
+  const data = await rentalsServices.retrieveRentals(user?.email);
 
-  // successResponse(res, {
-  //   statusCode: status.OK,
-  //   success: true,
-  //   message: 'Retrieve rentals successfully!',
-  //   data,
-  // });
+  successResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Retrieve rentals successfully!',
+    data,
+  });
 });
 
 const returnBike = catchAsync(async (req, res) => {

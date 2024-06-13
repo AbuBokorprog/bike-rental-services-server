@@ -21,14 +21,13 @@ const createRental = (0, catch_async_1.catchAsync)(async (req, res) => {
 });
 const getAllRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
     const user = req.user;
-    console.log(user);
-    // const data = await rentalsServices.retrieveRentals(user?.email);
-    // successResponse(res, {
-    //   statusCode: status.OK,
-    //   success: true,
-    //   message: 'Retrieve rentals successfully!',
-    //   data,
-    // });
+    const data = await rentals_services_1.rentalsServices.retrieveRentals(user?.email);
+    (0, successResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Retrieve rentals successfully!',
+        data,
+    });
 });
 const returnBike = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;
