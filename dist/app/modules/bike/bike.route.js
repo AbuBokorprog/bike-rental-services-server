@@ -12,7 +12,7 @@ const authMiddleware_1 = require("../../utils/authMiddleware");
 const users_constants_1 = require("../users/users.constants");
 const route = express_1.default.Router();
 route.post('/', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin), (0, validate_request_1.validationRequest)(bike_validation_1.createBikeValidationSchema), bike_controller_1.bikeControllers.createBike);
-route.get('/', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user), bike_controller_1.bikeControllers.retrieveAllBike);
+route.get('/', bike_controller_1.bikeControllers.retrieveAllBike);
 route.put('/:id', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin), (0, validate_request_1.validationRequest)(bike_validation_1.updateBikeValidationSchema), bike_controller_1.bikeControllers.updateBike);
 route.delete('/:id', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin), bike_controller_1.bikeControllers.deleteBike);
 exports.bikeRouter = route;

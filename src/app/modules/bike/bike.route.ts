@@ -16,11 +16,7 @@ route.post(
   bikeControllers.createBike,
 );
 
-route.get(
-  '/',
-  auth(UserRole.admin, UserRole.user),
-  bikeControllers.retrieveAllBike,
-);
+route.get('/', bikeControllers.retrieveAllBike);
 
 route.put(
   '/:id',
