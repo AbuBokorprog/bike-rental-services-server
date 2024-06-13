@@ -5,6 +5,7 @@ import {
   createBikeValidationSchema,
   updateBikeValidationSchema,
 } from './bike.validation';
+import { auth } from '../../utils/authMiddleware';
 const route = express.Router();
 
 route.post(
@@ -13,7 +14,7 @@ route.post(
   bikeControllers.createBike,
 );
 
-route.get('/', bikeControllers.retrieveAllBike);
+route.get('/', auth(), bikeControllers.retrieveAllBike);
 
 route.put(
   '/:id',
