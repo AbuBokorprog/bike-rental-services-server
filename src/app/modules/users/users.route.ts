@@ -4,9 +4,14 @@ import { UserRole } from './users.constants';
 import { auth } from '../../utils/authMiddleware';
 const route = express.Router();
 
-route.get('/me', auth(UserRole.admin, UserRole.user));
+route.get(
+  '/me',
+  auth(UserRole.admin, UserRole.user),
+  userControllers.retrieveUser,
+);
+
 route.put(
-  '/:me',
+  '/me',
   auth(UserRole.admin, UserRole.user),
   userControllers.updateSingleUser,
 );
