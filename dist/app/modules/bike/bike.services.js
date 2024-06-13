@@ -14,13 +14,16 @@ const createBike = async (payload) => {
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 const retrieveAllBikes = async (query) => {
     const data = await bike_model_1.Bike.find();
+    if (!data || data.length < 1) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
     return data;
 };
 const updateBikes = async (id, payload) => {
     // check is bike exist?
     const isBikeExist = await bike_model_1.Bike.findById(id);
     if (!isBikeExist) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Bike is no found!');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     const data = await bike_model_1.Bike.findByIdAndUpdate(id, payload, {
         new: true,
@@ -31,7 +34,7 @@ const updateBikes = async (id, payload) => {
 const deleteBikes = async (id) => {
     const isBikeExist = await bike_model_1.Bike.findById(id);
     if (!isBikeExist) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Bike is no found!');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     const data = await bike_model_1.Bike.findByIdAndDelete(id);
     return data;

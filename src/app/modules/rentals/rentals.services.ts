@@ -6,7 +6,6 @@ import { rentals } from './rentals.model';
 import { AppError } from '../../errors/AppError';
 import { JwtPayload } from 'jsonwebtoken';
 import { userModel } from '../users/users.model';
-// import { JwtPayload } from 'jsonwebtoken';
 
 const createRentals = async (email: JwtPayload, payload: TRentals) => {
   const session = await startSession();
@@ -14,7 +13,7 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
 
   if (!user) {
     throw new AppError(
-      status.BAD_REQUEST,
+      status.UNAUTHORIZED,
       'You are unauthorized, Please sign up',
     );
   }
@@ -35,7 +34,7 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
       { new: true, runValidators: true, session },
     );
     if (!updateBike) {
-      throw new AppError(status.BAD_REQUEST, 'Bike not found!');
+      throw new AppError(status.BAD_REQUEST, 'Bike update failed!');
     }
     await session.commitTransaction();
     session.endSession();
@@ -43,7 +42,6 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.log(error);
     throw new AppError(status.BAD_REQUEST, 'Rental create failed!');
   }
 };
@@ -54,14 +52,14 @@ const returnBike = async (id: string) => {
   const bikeId = currentRentals?.bikeId;
 
   if (!currentRentals) {
-    throw new AppError(status.NOT_FOUND, 'Rental is no found!');
+    throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
   //   find bike by id
   const rentalsBike = await Bike.findById(bikeId);
 
   if (!rentalsBike) {
-    throw new AppError(status.NOT_FOUND, 'Bike is no found!');
+    throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
   const pricePerHour = rentalsBike?.pricePerHour;
@@ -120,11 +118,14 @@ const retrieveRentals = async (email: JwtPayload) => {
   const user = await userModel.findOne({ email: email });
 
   if (!user) {
-    throw new AppError(status.NOT_FOUND, 'No Found');
+    throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
   const data = await rentals.find({ userId: user?._id });
 
+  if (!data || data.length < 1) {
+    throw new AppError(status.NOT_FOUND, 'No Data Found');
+  }
   return data;
 };
 export const rentalsServices = { createRentals, returnBike, retrieveRentals };

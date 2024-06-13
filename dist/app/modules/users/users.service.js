@@ -10,7 +10,7 @@ const users_model_1 = require("./users.model");
 const http_status_1 = __importDefault(require("http-status"));
 const retrieveAllUsers = async (payload) => {
     const result = await users_model_1.userModel.find({ email: payload });
-    if (!result) {
+    if (!result || result.length < 1) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     return result;

@@ -9,7 +9,6 @@ const users_model_1 = require("./../users/users.model");
 const AppError_1 = require("../../errors/AppError");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const http_status_1 = __importDefault(require("http-status"));
-// import { TJWTPayload } from './auth.constants';
 const config_1 = __importDefault(require("../../config"));
 const signUpUser = async (payload) => {
     const result = await users_model_1.userModel.create(payload);
@@ -19,11 +18,11 @@ const loginUser = async (payload) => {
     // check the user is exist ?
     const userExist = await users_model_1.userModel.findOne({ email: payload.email });
     if (!userExist) {
-        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'The user is not found');
+        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'No Data Found');
     }
     const isPasswordMatched = await bcrypt_1.default.compare(payload.password, userExist.password);
     if (!isPasswordMatched) {
-        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Password incorrect!');
+        throw new AppError_1.AppError(http_status_1.default.UNAUTHORIZED, 'Password incorrect!');
     }
     const tokenPayload = {
         email: payload.email,

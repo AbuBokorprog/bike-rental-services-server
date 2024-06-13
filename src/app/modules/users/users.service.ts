@@ -8,7 +8,7 @@ import { TUser } from './users.interface';
 const retrieveAllUsers = async (payload: JwtPayload) => {
   const result = await userModel.find({ email: payload });
 
-  if (!result) {
+  if (!result || result.length < 1) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 

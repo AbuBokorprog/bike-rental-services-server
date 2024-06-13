@@ -10,12 +10,11 @@ const bike_model_1 = require("../bike/bike.model");
 const rentals_model_1 = require("./rentals.model");
 const AppError_1 = require("../../errors/AppError");
 const users_model_1 = require("../users/users.model");
-// import { JwtPayload } from 'jsonwebtoken';
 const createRentals = async (email, payload) => {
     const session = await (0, mongoose_1.startSession)();
     const user = await users_model_1.userModel.findOne({ email: email });
     if (!user) {
-        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'You are unauthorized, Please sign up');
+        throw new AppError_1.AppError(http_status_1.default.UNAUTHORIZED, 'You are unauthorized, Please sign up');
     }
     try {
         session.startTransaction();
@@ -26,7 +25,7 @@ const createRentals = async (email, payload) => {
         }
         const updateBike = await bike_model_1.Bike.findByIdAndUpdate(payload.bikeId, { isAvailable: false }, { new: true, runValidators: true, session });
         if (!updateBike) {
-            throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Bike not found!');
+            throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Bike update failed!');
         }
         await session.commitTransaction();
         session.endSession();
@@ -35,7 +34,6 @@ const createRentals = async (email, payload) => {
     catch (error) {
         await session.abortTransaction();
         session.endSession();
-        console.log(error);
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental create failed!');
     }
 };
@@ -44,12 +42,12 @@ const returnBike = async (id) => {
     const currentRentals = await rentals_model_1.rentals.findById(id);
     const bikeId = currentRentals?.bikeId;
     if (!currentRentals) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Rental is no found!');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     //   find bike by id
     const rentalsBike = await bike_model_1.Bike.findById(bikeId);
     if (!rentalsBike) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Bike is no found!');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     const pricePerHour = rentalsBike?.pricePerHour;
     const startTime = new Date(currentRentals?.startTime);
@@ -84,9 +82,12 @@ const returnBike = async (id) => {
 const retrieveRentals = async (email) => {
     const user = await users_model_1.userModel.findOne({ email: email });
     if (!user) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Found');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     const data = await rentals_model_1.rentals.find({ userId: user?._id });
+    if (!data || data.length < 1) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
     return data;
 };
 exports.rentalsServices = { createRentals, returnBike, retrieveRentals };

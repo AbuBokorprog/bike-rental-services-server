@@ -7,7 +7,7 @@ import config from '../config';
 
 export const auth = (...RequireRoles: (string | undefined)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization?.split(' ')[1];
 
     // if the token send from the token
     if (!token) {
@@ -18,18 +18,24 @@ export const auth = (...RequireRoles: (string | undefined)[]) => {
 
     jwt.verify(token, config.jwt_secret, (err, decoded) => {
       if (err) {
-        throw new AppError(401, 'You are unauthorized! Invalid token.');
+        throw new AppError(
+          status.UNAUTHORIZED,
+          'You are unauthorized! Invalid token.',
+        );
       }
 
       const payload = decoded as JwtPayload;
 
       // Checking the payload type
       if (!payload.email || !payload.role) {
-        throw new AppError(401, 'You are unauthorized! Invalid token.');
+        throw new AppError(
+          status.UNAUTHORIZED,
+          'You are unauthorized! Invalid token.',
+        );
       }
 
       if (RequireRoles && !RequireRoles.includes(payload.role)) {
-        throw new AppError(401, 'You are unauthorized!.');
+        throw new AppError(status.UNAUTHORIZED, 'You are unauthorized!.');
       }
 
       // Set the decoded payload to req.user

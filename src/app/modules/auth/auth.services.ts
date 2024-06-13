@@ -5,7 +5,6 @@ import { TUserLogin } from './auth.interface';
 import { AppError } from '../../errors/AppError';
 import jwt from 'jsonwebtoken';
 import status from 'http-status';
-// import { TJWTPayload } from './auth.constants';
 import config from '../../config';
 
 const signUpUser = async (payload: TUser) => {
@@ -15,10 +14,9 @@ const signUpUser = async (payload: TUser) => {
 
 const loginUser = async (payload: TUserLogin) => {
   // check the user is exist ?
-
   const userExist = await userModel.findOne({ email: payload.email });
   if (!userExist) {
-    throw new AppError(status.BAD_REQUEST, 'The user is not found');
+    throw new AppError(status.BAD_REQUEST, 'No Data Found');
   }
 
   const isPasswordMatched = await bcrypt.compare(
@@ -27,7 +25,7 @@ const loginUser = async (payload: TUserLogin) => {
   );
 
   if (!isPasswordMatched) {
-    throw new AppError(status.BAD_REQUEST, 'Password incorrect!');
+    throw new AppError(status.UNAUTHORIZED, 'Password incorrect!');
   }
 
   const tokenPayload = {
