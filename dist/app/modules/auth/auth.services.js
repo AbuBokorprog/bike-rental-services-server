@@ -8,8 +8,9 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const users_model_1 = require("./../users/users.model");
 const AppError_1 = require("../../errors/AppError");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("../../config"));
 const http_status_1 = __importDefault(require("http-status"));
+// import { TJWTPayload } from './auth.constants';
+const config_1 = __importDefault(require("../../config"));
 const signUpUser = async (payload) => {
     const result = await users_model_1.userModel.create(payload);
     return result;
@@ -28,7 +29,6 @@ const loginUser = async (payload) => {
         email: payload.email,
         role: userExist.role,
     };
-    // JWT_SECRET = 7062276ef88f2fcb96f784c05932a9b700f6188954e2f75dfd62eb7f3fce26b4
     const accessToken = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.jwt_secret, {
         expiresIn: config_1.default.expires_in,
     });

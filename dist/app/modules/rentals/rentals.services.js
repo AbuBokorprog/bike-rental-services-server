@@ -9,6 +9,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const bike_model_1 = require("../bike/bike.model");
 const rentals_model_1 = require("./rentals.model");
 const AppError_1 = require("../../errors/AppError");
+// import { JwtPayload } from 'jsonwebtoken';
 const createRentals = async (payload) => {
     const session = await (0, mongoose_1.startSession)();
     try {
@@ -73,11 +74,11 @@ const returnBike = async (id) => {
     }
 };
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-const getAllRentals = async (email, query) => {
-    const data = await rentals_model_1.rentals.find({ email: email });
-    if (!data) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Not Data Found!');
-    }
-    return data;
+const getAllRentals = async (query) => {
+    // const data = await rentals.find({ email: email });
+    // if (!data) {
+    //   throw new AppError(status.NOT_FOUND, 'Not Data Found!');
+    // }
+    // return data;
 };
 exports.rentalsServices = { createRentals, returnBike, getAllRentals };

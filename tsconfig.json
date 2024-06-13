@@ -6,6 +6,14 @@
     "node_modules"
   ], // which files to skip
   "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/app/interface"
+    ],
+    "types": [
+      "node",
+      "index"
+    ],
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */

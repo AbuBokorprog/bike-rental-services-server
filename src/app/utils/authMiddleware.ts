@@ -3,13 +3,17 @@ import { NextFunction, Request, Response } from 'express';
 import { catchAsync } from './catch.async';
 import { AppError } from '../errors/AppError';
 import status from 'http-status';
-import jwt, { jwtPayload } from 'jsonwebtoken';
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
-import { TJWTPayload } from '../modules/auth/auth.constants';
+// import { TJwtPayload } from '../modules/auth/auth.constants';
+// import { TJWTPayload } from '../modules/auth/auth.constants';
 
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 export const auth = (...RequireRoles: (string | undefined)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
+
     // if the token send from the token
     if (!token) {
       throw new AppError(status.UNAUTHORIZED, 'You are unauthorized!');
@@ -17,25 +21,22 @@ export const auth = (...RequireRoles: (string | undefined)[]) => {
 
     // check is the token verify?
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jwt.verify(
-      token,
-      config.jwt_secret,
-      function (err: any, decoded: TJWTPayload) {
-        // err
-        if (err) {
-          throw new AppError(status.BAD_REQUEST, 'You are unauthorized!');
-        }
-        const role = decoded?.role;
+    jwt.verify(token, config.jwt_secret, (err, decoded) => {
+      if (err) {
+        return next(new AppError(401, 'You are unauthorized! Invalid token.'));
+      }
 
-        if (RequireRoles && !RequireRoles.includes(role)) {
-          throw new AppError(status.BAD_REQUEST, 'You are unauthorized!');
-        }
-        // decoded undefined
+      const payload = decoded as JwtPayload;
 
-        req.user = decoded as jwtPayload;
-      },
-    );
+      // Checking the payload type
+      if (!payload.data.email || !payload.data.role) {
+        return next(new AppError(401, 'Token is missing required fields.'));
+      }
 
-    next();
+      // Set the decoded payload to req.user
+      req.user = payload.data;
+
+      next();
+    });
   });
 };

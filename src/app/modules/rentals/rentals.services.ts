@@ -4,6 +4,7 @@ import { Bike } from '../bike/bike.model';
 import { TRentals } from './rentals.interface';
 import { rentals } from './rentals.model';
 import { AppError } from '../../errors/AppError';
+// import { JwtPayload } from 'jsonwebtoken';
 
 const createRentals = async (payload: TRentals) => {
   const session = await startSession();
@@ -103,13 +104,11 @@ const returnBike = async (id: string) => {
 };
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-const getAllRentals = async (email: string, query: any) => {
-  const data = await rentals.find({ email: email });
-
-  if (!data) {
-    throw new AppError(status.NOT_FOUND, 'Not Data Found!');
-  }
-
-  return data;
+const getAllRentals = async (query: any) => {
+  // const data = await rentals.find({ email: email });
+  // if (!data) {
+  //   throw new AppError(status.NOT_FOUND, 'Not Data Found!');
+  // }
+  // return data;
 };
 export const rentalsServices = { createRentals, returnBike, getAllRentals };

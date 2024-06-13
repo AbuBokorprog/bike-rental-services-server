@@ -6,6 +6,7 @@ import cors from 'cors';
 import { globalError } from './app/middleware/global.error';
 import { notfoundError } from './app/middleware/not.found.error';
 import router from './app/router';
+import config from './app/config';
 const app: Application = express();
 
 app.use(express.json());
