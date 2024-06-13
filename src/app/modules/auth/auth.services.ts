@@ -6,6 +6,7 @@ import { AppError } from '../../errors/AppError';
 import jwt from 'jsonwebtoken';
 import config from '../../config';
 import status from 'http-status';
+import { TJWTPayload } from './auth.constants';
 const signUpUser = async (payload: TUser) => {
   const result = await userModel.create(payload);
   return result;
@@ -28,7 +29,10 @@ const loginUser = async (payload: TUserLogin) => {
     throw new AppError(status.BAD_REQUEST, 'Password incorrect!');
   }
 
-  const tokenPayload = { email: payload.email, role: userExist.role };
+  const tokenPayload: TJWTPayload = {
+    email: payload.email,
+    role: userExist.role,
+  };
   // JWT_SECRET = 7062276ef88f2fcb96f784c05932a9b700f6188954e2f75dfd62eb7f3fce26b4
   const accessToken = jwt.sign(tokenPayload, config.jwt_secret, {
     expiresIn: config.expires_in,
