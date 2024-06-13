@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
+import status from 'http-status';
 export const notfoundError = (
   req: Request,
   res: Response,
@@ -8,7 +8,7 @@ export const notfoundError = (
 ) => {
   return res.status(404).json({
     success: false,
-    statusCode: 404,
+    statusCode: status.NOT_FOUND,
     message: 'Not Found!',
   });
 };

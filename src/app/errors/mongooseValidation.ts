@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { TErrorMessages, TGenericResponse } from './error';
-
+import { TErrorMessages, TGenericResponse } from '../interface/error';
+import status from 'http-status';
 export const mongooseValidationError = (
   err: mongoose.Error.ValidationError,
 ): TGenericResponse => {
@@ -12,7 +12,7 @@ export const mongooseValidationError = (
       };
     },
   );
-  const statusCode = 400;
+  const statusCode = status.BAD_REQUEST;
 
   return {
     statusCode,

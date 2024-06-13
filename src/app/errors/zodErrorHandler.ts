@@ -1,6 +1,6 @@
 import { ZodError, ZodIssue } from 'zod';
-import { TErrorMessages, TGenericResponse } from './error';
-
+import { TErrorMessages, TGenericResponse } from '../interface/error';
+import status from 'http-status';
 export const zodErrorHandler = (err: ZodError): TGenericResponse => {
   const errorMessages: TErrorMessages = err.issues?.map((issue: ZodIssue) => {
     return {
@@ -9,7 +9,7 @@ export const zodErrorHandler = (err: ZodError): TGenericResponse => {
     };
   });
 
-  const statusCode = 400;
+  const statusCode = status.BAD_REQUEST;
 
   return {
     statusCode,

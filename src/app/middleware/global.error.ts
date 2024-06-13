@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { zodErrorHandler } from '../errors/zodErrorHandler';
-import { TErrorMessages } from '../errors/error';
+import { TErrorMessages } from '../interface/error';
 import config from '../config';
 import { mongooseValidationError } from '../errors/mongooseValidation';
 import { duplicateErrorHandler } from '../errors/duplicateErrorHandler';
