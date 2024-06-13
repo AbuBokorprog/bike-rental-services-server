@@ -4,13 +4,24 @@ import { Bike } from '../bike/bike.model';
 import { TRentals } from './rentals.interface';
 import { rentals } from './rentals.model';
 import { AppError } from '../../errors/AppError';
+import { JwtPayload } from 'jsonwebtoken';
+import { userModel } from '../users/users.model';
 // import { JwtPayload } from 'jsonwebtoken';
 
-const createRentals = async (payload: TRentals) => {
+const createRentals = async (email: JwtPayload, payload: TRentals) => {
   const session = await startSession();
+  const user = await userModel.findOne({ email: email });
 
+  if (!user) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      'You are unauthorized, Please sign up',
+    );
+  }
   try {
     session.startTransaction();
+
+    payload.userId = user?._id;
 
     const data = await rentals.create([payload], { session });
 
@@ -32,6 +43,7 @@ const createRentals = async (payload: TRentals) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    console.log(error);
     throw new AppError(status.BAD_REQUEST, 'Rental create failed!');
   }
 };
@@ -103,12 +115,15 @@ const returnBike = async (id: string) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-const getAllRentals = async (query: any) => {
-  // const data = await rentals.find({ email: email });
-  // if (!data) {
-  //   throw new AppError(status.NOT_FOUND, 'Not Data Found!');
-  // }
-  // return data;
+const retrieveRentals = async (email: JwtPayload) => {
+  const user = await userModel.findOne({ email: email });
+
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, 'No Found');
+  }
+
+  const data = await rentals.find({ userId: user?._id });
+
+  return data;
 };
-export const rentalsServices = { createRentals, returnBike, getAllRentals };
+export const rentalsServices = { createRentals, returnBike, retrieveRentals };

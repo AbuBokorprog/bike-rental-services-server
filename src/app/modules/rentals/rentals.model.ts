@@ -15,6 +15,7 @@ const rentalsSchema = new Schema<TRentals>({
   startTime: {
     type: Date,
     required: true,
+    default: new Date(),
   },
   returnTime: {
     type: Date,

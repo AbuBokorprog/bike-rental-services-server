@@ -9,7 +9,8 @@ const successResponse_1 = __importDefault(require("../../utils/successResponse")
 const rentals_services_1 = require("./rentals.services");
 const createRental = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { body } = req.body;
-    const data = await rentals_services_1.rentalsServices.createRentals(body);
+    const user = req.user;
+    const data = await rentals_services_1.rentalsServices.createRentals(user?.email, body);
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,
@@ -18,14 +19,15 @@ const createRental = (0, catch_async_1.catchAsync)(async (req, res) => {
     });
 });
 const getAllRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
-    // const userEmail = req.user;
-    const data = await rentals_services_1.rentalsServices.getAllRentals(req.query);
-    (0, successResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: 'Retrieve rentals successfully!',
-        data,
-    });
+    const user = req.user;
+    console.log(user);
+    // const data = await rentalsServices.retrieveRentals(user?.email);
+    // successResponse(res, {
+    //   statusCode: status.OK,
+    //   success: true,
+    //   message: 'Retrieve rentals successfully!',
+    //   data,
+    // });
 });
 const returnBike = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;

@@ -16,6 +16,7 @@ const rentalsSchema = new mongoose_1.Schema({
     startTime: {
         type: Date,
         required: true,
+        default: new Date(),
     },
     returnTime: {
         type: Date,

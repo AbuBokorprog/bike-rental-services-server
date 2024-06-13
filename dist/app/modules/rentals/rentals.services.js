@@ -9,11 +9,17 @@ const http_status_1 = __importDefault(require("http-status"));
 const bike_model_1 = require("../bike/bike.model");
 const rentals_model_1 = require("./rentals.model");
 const AppError_1 = require("../../errors/AppError");
+const users_model_1 = require("../users/users.model");
 // import { JwtPayload } from 'jsonwebtoken';
-const createRentals = async (payload) => {
+const createRentals = async (email, payload) => {
     const session = await (0, mongoose_1.startSession)();
+    const user = await users_model_1.userModel.findOne({ email: email });
+    if (!user) {
+        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'You are unauthorized, Please sign up');
+    }
     try {
         session.startTransaction();
+        payload.userId = user?._id;
         const data = await rentals_model_1.rentals.create([payload], { session });
         if (!data) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental created failed!');
@@ -29,6 +35,7 @@ const createRentals = async (payload) => {
     catch (error) {
         await session.abortTransaction();
         session.endSession();
+        console.log(error);
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental create failed!');
     }
 };
@@ -73,12 +80,12 @@ const returnBike = async (id) => {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Return rental failed!');
     }
 };
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-const getAllRentals = async (query) => {
-    // const data = await rentals.find({ email: email });
-    // if (!data) {
-    //   throw new AppError(status.NOT_FOUND, 'Not Data Found!');
-    // }
-    // return data;
+const retrieveRentals = async (email) => {
+    const user = await users_model_1.userModel.findOne({ email: email });
+    if (!user) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Found');
+    }
+    const data = await rentals_model_1.rentals.find({ userId: user?._id });
+    return data;
 };
-exports.rentalsServices = { createRentals, returnBike, getAllRentals };
+exports.rentalsServices = { createRentals, returnBike, retrieveRentals };
