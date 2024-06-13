@@ -34,7 +34,7 @@ const returnBike = catchAsync(async (req, res) => {
   const data = await rentalsServices.returnBike(id);
 
   successResponse(res, {
-    statusCode: 200,
+    statusCode: status.OK,
     success: true,
     message: 'create rentals successfully!',
     data,

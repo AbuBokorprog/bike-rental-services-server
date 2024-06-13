@@ -62,6 +62,7 @@ const returnBike = async (id) => {
     const totalCost = (Number(differenceInHours) * Number(pricePerHour)).toFixed(2);
     const session = await (0, mongoose_1.startSession)();
     try {
+        session.startTransaction();
         const updateRental = await rentals_model_1.rentals.findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true }, { new: true, runValidators: true, session });
         if (!updateRental) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental update failed!');

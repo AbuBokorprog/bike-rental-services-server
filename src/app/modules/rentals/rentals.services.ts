@@ -81,6 +81,7 @@ const returnBike = async (id: string) => {
   const session = await startSession();
 
   try {
+    session.startTransaction();
     const updateRental = await rentals.findByIdAndUpdate(
       id,
       { returnTime, totalCost, isReturned: true },
