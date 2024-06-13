@@ -15,15 +15,15 @@ const retrieveAllUsers = async (payload) => {
     }
     return result;
 };
-const updateProfile = async () => {
-    // const result = await userModel.findByIdAndUpdate(payload, {
-    //   new: true,
-    //   runValidators: true,
-    // });
-    // if (!result) {
-    //   throw new AppError(status.NOT_FOUND, 'No Data Found');
-    // }
-    // return result;
+const updateProfile = async (email, payload) => {
+    const result = await users_model_1.userModel.findOneAndUpdate({ email: email }, payload, {
+        new: true,
+        runValidators: true,
+    });
+    if (!result) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
+    return result;
 };
 exports.userServices = {
     retrieveAllUsers,

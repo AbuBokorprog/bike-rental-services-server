@@ -3,6 +3,7 @@ import { AppError } from '../../errors/AppError';
 // import { TUser } from './users.interface';
 import { userModel } from './users.model';
 import status from 'http-status';
+import { TUser } from './users.interface';
 
 const retrieveAllUsers = async (payload: JwtPayload) => {
   const result = await userModel.find({ email: payload });
@@ -14,15 +15,15 @@ const retrieveAllUsers = async (payload: JwtPayload) => {
   return result;
 };
 
-const updateProfile = async () => {
-  // const result = await userModel.findByIdAndUpdate(payload, {
-  //   new: true,
-  //   runValidators: true,
-  // });
-  // if (!result) {
-  //   throw new AppError(status.NOT_FOUND, 'No Data Found');
-  // }
-  // return result;
+const updateProfile = async (email: JwtPayload, payload: Partial<TUser>) => {
+  const result = await userModel.findOneAndUpdate({ email: email }, payload, {
+    new: true,
+    runValidators: true,
+  });
+  if (!result) {
+    throw new AppError(status.NOT_FOUND, 'No Data Found');
+  }
+  return result;
 };
 
 export const userServices = {

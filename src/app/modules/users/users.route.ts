@@ -2,6 +2,8 @@ import express from 'express';
 import { userControllers } from './users.controller';
 import { UserRole } from './users.constants';
 import { auth } from '../../utils/authMiddleware';
+import { validationRequest } from '../../utils/validate.request';
+import { updateUserSignInValidationSchema } from './users.validation';
 const route = express.Router();
 
 route.get(
@@ -13,6 +15,7 @@ route.get(
 route.put(
   '/me',
   auth(UserRole.admin, UserRole.user),
+  validationRequest(updateUserSignInValidationSchema),
   userControllers.updateSingleUser,
 );
 export const userRouter = route;
