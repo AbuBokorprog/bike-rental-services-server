@@ -13,11 +13,7 @@ route.post(
   rentalsController.createRental,
 );
 
-route.get(
-  '/',
-  auth(UserRole.admin, UserRole.user),
-  rentalsController.getAllRentals,
-);
+route.get('/', auth(UserRole.user), rentalsController.getAllRentals);
 
 route.put('/:id/return', auth(UserRole.admin), rentalsController.returnBike);
 

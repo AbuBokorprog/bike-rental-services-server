@@ -102,8 +102,14 @@ const returnBike = async (id: string) => {
   }
 };
 
-const getAllRentals = async () => {
-  const data = await rentals.find();
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+const getAllRentals = async (email: string, query: any) => {
+  const data = await rentals.find({ email: email });
+
+  if (!data) {
+    throw new AppError(status.NOT_FOUND, 'Not Data Found!');
+  }
+
   return data;
 };
 export const rentalsServices = { createRentals, returnBike, getAllRentals };

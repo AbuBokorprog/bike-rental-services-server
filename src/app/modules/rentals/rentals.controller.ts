@@ -15,7 +15,8 @@ const createRental = catchAsync(async (req, res) => {
 });
 
 const getAllRentals = catchAsync(async (req, res) => {
-  const data = await rentalsServices.getAllRentals();
+  const userEmail = req.user;
+  const data = await rentalsServices.getAllRentals(userEmail, req.query);
 
   successResponse(res, {
     statusCode: 200,
