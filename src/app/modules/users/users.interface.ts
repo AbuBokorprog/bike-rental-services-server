@@ -1,3 +1,5 @@
+import { UserRole } from './users.constants';
+
 export interface TUser {
   name: string;
   email: string;
@@ -6,3 +8,5 @@ export interface TUser {
   address: string;
   role: 'admin' | 'user';
 }
+
+export type TUserRole = keyof typeof UserRole;

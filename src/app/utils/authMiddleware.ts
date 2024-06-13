@@ -7,7 +7,7 @@ import jwt, { jwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { TJWTPayload } from '../modules/auth/auth.constants';
 
-export const auth = () => {
+export const auth = (...RequireRoles: (string | undefined)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
     // if the token send from the token
@@ -23,7 +23,12 @@ export const auth = () => {
       function (err: any, decoded: TJWTPayload) {
         // err
         if (err) {
-          throw new AppError(status.BAD_REQUEST, 'You are unauthorized');
+          throw new AppError(status.BAD_REQUEST, 'You are unauthorized!');
+        }
+        const role = decoded?.role;
+
+        if (RequireRoles && !RequireRoles.includes(role)) {
+          throw new AppError(status.BAD_REQUEST, 'You are unauthorized!');
         }
         // decoded undefined
 
