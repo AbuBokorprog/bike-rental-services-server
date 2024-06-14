@@ -73,7 +73,7 @@ To set up the project locally, follow these steps:
 4. **Run the server:**
 
    ```bash
-   npm start
+   npm run dev
    ```
 
 ## Configuration
