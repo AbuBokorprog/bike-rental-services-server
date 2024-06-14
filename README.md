@@ -4,6 +4,7 @@ Welcome to the **Bike Rental Service** project! This service is designed to cate
 
 ## Table of Contents
 
+- [Live-Site](#live-site)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Installation](#installation)
@@ -13,6 +14,10 @@ Welcome to the **Bike Rental Service** project! This service is designed to cate
 - [Database Schema](#database-schema)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Live-Site
+
+[![Live-server-side]](https://bike-rental-services.vercel.app/)
 
 ## Features
 
@@ -253,10 +258,6 @@ Once the server is running, you can interact with the API using a tool like Post
 
   **Body:**
   No Data
-
-  ```
-
-  ```
 
 - **Get all rentals:**
 
