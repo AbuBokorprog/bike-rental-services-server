@@ -121,7 +121,10 @@ const retrieveRentals = async (email: JwtPayload) => {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
-  const data = await rentals.find({ userId: user?._id });
+  const data = await rentals
+    .find({ userId: user?._id })
+    .populate('user')
+    .populate('bike');
 
   if (!data || data.length < 1) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
