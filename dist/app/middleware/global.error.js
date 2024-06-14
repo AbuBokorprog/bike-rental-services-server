@@ -10,6 +10,7 @@ const config_1 = __importDefault(require("../config"));
 const mongooseValidation_1 = require("../errors/mongooseValidation");
 const duplicateErrorHandler_1 = require("../errors/duplicateErrorHandler");
 const AppError_1 = require("../errors/AppError");
+const castError_1 = require("../errors/castError");
 const globalError = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 err, req, res, 
@@ -36,7 +37,7 @@ next) => {
         errorMessages = simplified.errorMessages;
     }
     else if (err.name === 'CastError') {
-        const simplified = (0, mongooseValidation_1.mongooseValidationError)(err);
+        const simplified = (0, castError_1.castErrorHandler)(err);
         statusCode = simplified.statusCode;
         message = simplified.message;
         errorMessages = simplified.errorMessages;

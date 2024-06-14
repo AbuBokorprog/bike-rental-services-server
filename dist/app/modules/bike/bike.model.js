@@ -35,5 +35,7 @@ const BikeSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+}, {
+    timestamps: true,
 });
 exports.Bike = (0, mongoose_1.model)('Bike', BikeSchema);

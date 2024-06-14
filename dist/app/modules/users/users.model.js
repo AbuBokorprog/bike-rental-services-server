@@ -33,6 +33,8 @@ const userSchema = new mongoose_1.Schema({
         enum: ['admin', 'user'],
         default: 'user',
     },
+}, {
+    timestamps: true,
 });
 userSchema.pre('save', async function (next) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias

@@ -84,7 +84,10 @@ const retrieveRentals = async (email) => {
     if (!user) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
-    const data = await rentals_model_1.rentals.find({ userId: user?._id });
+    const data = await rentals_model_1.rentals
+        .find({ userId: user?._id })
+        .populate('userId')
+        .populate('bikeId');
     if (!data || data.length < 1) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
