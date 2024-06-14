@@ -48,8 +48,7 @@ To set up the project locally, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/bike-rental-service.git
-   cd bike-rental-service
+   git clone https://github.com/AbuBokorprog/bike-rental-services.git
    ```
 
 2. **Install dependencies:**
@@ -63,9 +62,12 @@ To set up the project locally, follow these steps:
    Create a `.env` file in the root directory and add the following variables:
 
    ```bash
-   PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/bike_rental
-   JWT_SECRET=your_secret_key
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/bike_rental // your database connection
+   SALT= // salt bcrypt
+   node_ENV= //development or production
+   JWT_ACCESS_SECRET= //jwt_secret_key
+   EXPIRES_IN= //expires_in
    ```
 
 4. **Run the server:**
@@ -80,7 +82,7 @@ Ensure you have a running MongoDB instance. You can set up your MongoDB URI in t
 
 ## Usage
 
-Once the server is running, you can interact with the API using a tool like Postman or through your frontend application. The API listens on the port specified in the `.env` file (default is `3000`).
+Once the server is running, you can interact with the API using a tool like Postman or through your frontend application. The API listens on the port specified in the `.env` file (default is `5000`).
 
 ## API Endpoints
 
@@ -273,7 +275,7 @@ Once the server is running, you can interact with the API using a tool like Post
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code adheres to the existing style and that you have added tests for any new functionality.
+Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code address to the existing style and that you have added tests for any new functionality.
 
 ## License
 

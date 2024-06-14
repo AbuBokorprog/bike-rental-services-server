@@ -6,6 +6,7 @@ import config from '../config';
 import { mongooseValidationError } from '../errors/mongooseValidation';
 import { duplicateErrorHandler } from '../errors/duplicateErrorHandler';
 import { AppError } from '../errors/AppError';
+import { castErrorHandler } from '../errors/castError';
 
 export const globalError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +39,7 @@ export const globalError = (
     message = simplified.message;
     errorMessages = simplified.errorMessages;
   } else if (err.name === 'CastError') {
-    const simplified = mongooseValidationError(err);
+    const simplified = castErrorHandler(err);
     statusCode = simplified.statusCode;
     message = simplified.message;
     errorMessages = simplified.errorMessages;
