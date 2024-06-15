@@ -9,14 +9,42 @@ import { userModel } from '../users/users.model';
 
 const createRentals = async (email: JwtPayload, payload: TRentals) => {
   const session = await startSession();
+  // get specific user
   const user = await userModel.findOne({ email: email });
 
+  // if user not exist
   if (!user) {
     throw new AppError(
       status.UNAUTHORIZED,
       'You are unauthorized, Please sign up',
     );
   }
+
+  // check is startTime same to previous rentals startTime
+  const existingRentalBikes = await rentals.findOne({
+    startTime: payload.startTime,
+    userId: user?._id,
+  });
+
+  // check the users rentals is not return
+
+  const existingRentalNotReturnYet = await rentals.findOne({
+    userId: user?._id,
+    isReturned: false,
+  });
+
+  //  if startTime same to previous rentals startTime.
+  // if users previous rentals is not return.
+  if (
+    (existingRentalBikes && existingRentalBikes?.isReturned == false) ||
+    existingRentalNotReturnYet
+  ) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      "You are already renting a bike but you didn't return, Before renting a new bike you have to return your previous bike!",
+    );
+  }
+
   try {
     session.startTransaction();
 

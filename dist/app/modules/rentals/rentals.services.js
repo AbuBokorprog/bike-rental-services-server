@@ -12,9 +12,24 @@ const AppError_1 = require("../../errors/AppError");
 const users_model_1 = require("../users/users.model");
 const createRentals = async (email, payload) => {
     const session = await (0, mongoose_1.startSession)();
+    // get specific user
     const user = await users_model_1.userModel.findOne({ email: email });
+    // if user not exist
     if (!user) {
         throw new AppError_1.AppError(http_status_1.default.UNAUTHORIZED, 'You are unauthorized, Please sign up');
+    }
+    const existingRentalBikes = await rentals_model_1.rentals.findOne({
+        startTime: payload.startTime,
+        userId: user?._id,
+    });
+    // check the users is
+    const existingNotReturnYet = await rentals_model_1.rentals.findOne({
+        userId: user?._id,
+        isReturned: false,
+    });
+    if ((existingRentalBikes && existingRentalBikes?.isReturned == false) ||
+        existingNotReturnYet) {
+        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, "You are already renting a bike but you didn't return, Before renting a new bike you have to return your previous bike!");
     }
     try {
         session.startTransaction();
