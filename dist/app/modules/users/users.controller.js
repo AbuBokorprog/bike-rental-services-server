@@ -13,18 +13,18 @@ const retrieveUser = (0, catch_async_1.catchAsync)(async (req, res) => {
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'Retrieve All users successfully!',
+        message: 'User profile retrieved successfully!',
         data,
     });
 });
 const updateSingleUser = (0, catch_async_1.catchAsync)(async (req, res) => {
     const user = req.user;
-    const { body } = req.body;
+    const body = req.body;
     const data = await users_service_1.userServices.updateProfile(user?.email, body);
     (0, successResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: 'Update user successfully!',
+        message: 'Profile updated successfully!',
         data,
     });
 });

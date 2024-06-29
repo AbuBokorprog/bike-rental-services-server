@@ -18,17 +18,20 @@ const createRentals = async (email, payload) => {
     if (!user) {
         throw new AppError_1.AppError(http_status_1.default.UNAUTHORIZED, 'You are unauthorized, Please sign up');
     }
+    // check is startTime same to previous rentals startTime
     const existingRentalBikes = await rentals_model_1.rentals.findOne({
         startTime: payload.startTime,
         userId: user?._id,
     });
-    // check the users is
-    const existingNotReturnYet = await rentals_model_1.rentals.findOne({
+    // check the users rentals is not return
+    const existingRentalNotReturnYet = await rentals_model_1.rentals.findOne({
         userId: user?._id,
         isReturned: false,
     });
+    //  if startTime same to previous rentals startTime.
+    // if users previous rentals is not return.
     if ((existingRentalBikes && existingRentalBikes?.isReturned == false) ||
-        existingNotReturnYet) {
+        existingRentalNotReturnYet) {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, "You are already renting a bike but you didn't return, Before renting a new bike you have to return your previous bike!");
     }
     try {

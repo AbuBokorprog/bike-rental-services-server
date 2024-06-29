@@ -33,11 +33,11 @@ const loginUser = async (payload: TUserLogin) => {
     role: userExist.role,
   };
 
-  const accessToken = jwt.sign(tokenPayload, config.jwt_secret as string, {
+  const token = jwt.sign(tokenPayload, config.jwt_secret as string, {
     expiresIn: config.expires_in,
   });
 
-  return { accessToken, isPasswordMatched };
+  return { token, data: userExist };
 };
 
 export const authServices = { signUpUser, loginUser };

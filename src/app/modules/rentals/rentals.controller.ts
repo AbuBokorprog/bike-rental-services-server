@@ -4,13 +4,13 @@ import { rentalsServices } from './rentals.services';
 import status from 'http-status';
 
 const createRental = catchAsync(async (req, res) => {
-  const { body } = req.body;
+  const body = req.body;
   const user = req.user;
   const data = await rentalsServices.createRentals(user?.email, body);
   successResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'create rentals successfully!',
+    message: 'Rental created successfully',
     data,
   });
 });
@@ -22,7 +22,7 @@ const getAllRentals = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'Retrieve rentals successfully!',
+    message: 'Rentals retrieved successfully',
     data,
   });
 });
@@ -35,7 +35,7 @@ const returnBike = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'create rentals successfully!',
+    message: 'Bike returned successfully',
     data,
   });
 });

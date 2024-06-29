@@ -9,19 +9,19 @@ const retrieveUser = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Retrieve All users successfully!',
+    message: 'User profile retrieved successfully!',
     data,
   });
 });
 
 const updateSingleUser = catchAsync(async (req, res) => {
   const user = req.user;
-  const { body } = req.body;
+  const body = req.body;
   const data = await userServices.updateProfile(user?.email, body);
   successResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Update user successfully!',
+    message: 'Profile updated successfully!',
     data,
   });
 });

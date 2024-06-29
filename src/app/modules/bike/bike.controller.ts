@@ -3,7 +3,7 @@ import successResponse from '../../utils/successResponse';
 import { bikeServices } from './bike.services';
 import status from 'http-status';
 const createBike = catchAsync(async (req, res) => {
-  const { body } = req.body;
+  const body = req.body;
 
   const data = await bikeServices.createBike(body);
 
@@ -21,20 +21,20 @@ const retrieveAllBike = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'Bikes retrieved successfully!',
+    message: 'Bikes retrieved successfully',
     data,
   });
 });
 
 const updateBike = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { body } = req.body;
+  const body = req.body;
   const data = await bikeServices.updateBikes(id, body);
 
   successResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'Bike updated successfully!',
+    message: 'Bike updated successfully',
     data,
   });
 });
@@ -47,7 +47,7 @@ const deleteBike = catchAsync(async (req, res) => {
   successResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'Bike deleted successfully!',
+    message: 'Bike deleted successfully',
     data,
   });
 });

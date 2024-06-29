@@ -28,9 +28,9 @@ const loginUser = async (payload) => {
         email: payload.email,
         role: userExist.role,
     };
-    const accessToken = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.jwt_secret, {
+    const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.jwt_secret, {
         expiresIn: config_1.default.expires_in,
     });
-    return { accessToken, isPasswordMatched };
+    return { token, data: userExist };
 };
 exports.authServices = { signUpUser, loginUser };
