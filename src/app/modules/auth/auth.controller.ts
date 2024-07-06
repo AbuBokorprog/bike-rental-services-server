@@ -2,15 +2,16 @@ import { Request, Response } from 'express';
 import { authServices } from './auth.services';
 import { catchAsync } from '../../utils/catch.async';
 import successResponse from '../../utils/successResponse';
+import httpStatus from 'http-status';
 
 const signUpUser = catchAsync(async (req, res) => {
   const body = req.body;
 
   const data = await authServices.signUpUser(body);
   successResponse(res, {
-    statusCode: 200,
+    statusCode: httpStatus.CREATED,
     success: true,
-    message: 'Sign up successfully!',
+    message: 'User registered successfully',
     data,
   });
 });
@@ -18,11 +19,13 @@ const signUpUser = catchAsync(async (req, res) => {
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const body = req.body;
 
-  const data = await authServices.loginUser(body);
+  const { token, data } = await authServices.loginUser(body);
+
   successResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'User login successfully!',
+    message: 'User logged in successfully',
+    token: token,
     data,
   });
 });

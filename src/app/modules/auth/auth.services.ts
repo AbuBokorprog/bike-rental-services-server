@@ -37,7 +37,11 @@ const loginUser = async (payload: TUserLogin) => {
     expiresIn: config.expires_in,
   });
 
-  return { token, data: userExist };
+  const user = await userModel
+    .findById(userExist._id)
+    .select({ password: 0, createdAt: 0, updatedAt: 0 });
+
+  return { token, data: user };
 };
 
 export const authServices = { signUpUser, loginUser };
