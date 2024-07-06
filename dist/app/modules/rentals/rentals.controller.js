@@ -13,7 +13,7 @@ const createRental = (0, catch_async_1.catchAsync)(async (req, res) => {
     const user = req.user;
     const data = await rentals_services_1.rentalsServices.createRentals(user?.email, body);
     (0, successResponse_1.default)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.OK,
         success: true,
         message: 'Rental created successfully',
         data,

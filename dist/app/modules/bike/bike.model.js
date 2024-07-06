@@ -25,7 +25,7 @@ const BikeSchema = new mongoose_1.Schema({
         required: true,
     },
     year: {
-        type: Date,
+        type: String,
     },
     model: {
         type: String,

@@ -79,7 +79,9 @@ const returnBike = async (id) => {
     const session = await (0, mongoose_1.startSession)();
     try {
         session.startTransaction();
-        const updateRental = await rentals_model_1.rentals.findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true }, { new: true, runValidators: true, session });
+        const updateRental = await rentals_model_1.rentals
+            .findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true }, { new: true, runValidators: true, session })
+            .select({ createdAt: 0, updatedAt: 0 });
         if (!updateRental) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental update failed!');
         }
@@ -104,8 +106,7 @@ const retrieveRentals = async (email) => {
     }
     const data = await rentals_model_1.rentals
         .find({ userId: user?._id })
-        .populate('userId')
-        .populate('bikeId');
+        .select({ createdAt: 0, updatedAt: 0 });
     if (!data || data.length < 1) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }

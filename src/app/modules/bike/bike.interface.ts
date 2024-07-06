@@ -4,7 +4,7 @@ export interface TBike {
   pricePerHour: number;
   isAvailable: boolean;
   cc: number;
-  year: Date;
+  year: string;
   model: string;
   brand: string;
 }

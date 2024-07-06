@@ -25,7 +25,7 @@ const BikeSchema = new Schema<TBike>(
       required: true,
     },
     year: {
-      type: Date,
+      type: String,
     },
     model: {
       type: String,

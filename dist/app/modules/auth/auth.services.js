@@ -31,6 +31,9 @@ const loginUser = async (payload) => {
     const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.jwt_secret, {
         expiresIn: config_1.default.expires_in,
     });
-    return { token, data: userExist };
+    const user = await users_model_1.userModel
+        .findById(userExist._id)
+        .select({ password: 0, createdAt: 0, updatedAt: 0 });
+    return { token, data: user };
 };
 exports.authServices = { signUpUser, loginUser };

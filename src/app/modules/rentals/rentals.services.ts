@@ -108,11 +108,13 @@ const returnBike = async (id: string) => {
 
   try {
     session.startTransaction();
-    const updateRental = await rentals.findByIdAndUpdate(
-      id,
-      { returnTime, totalCost, isReturned: true },
-      { new: true, runValidators: true, session },
-    );
+    const updateRental = await rentals
+      .findByIdAndUpdate(
+        id,
+        { returnTime, totalCost, isReturned: true },
+        { new: true, runValidators: true, session },
+      )
+      .select({ createdAt: 0, updatedAt: 0 });
 
     if (!updateRental) {
       throw new AppError(status.BAD_REQUEST, 'Rental update failed!');
@@ -144,16 +146,13 @@ const returnBike = async (id: string) => {
 
 const retrieveRentals = async (email: JwtPayload) => {
   const user = await userModel.findOne({ email: email });
-
   if (!user) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
   const data = await rentals
     .find({ userId: user?._id })
-    .populate('userId')
-    .populate('bikeId');
-
+    .select({ createdAt: 0, updatedAt: 0 });
   if (!data || data.length < 1) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }

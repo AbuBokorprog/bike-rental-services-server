@@ -13,7 +13,7 @@ const createBike = async (payload) => {
 };
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 const retrieveAllBikes = async (query) => {
-    const data = await bike_model_1.Bike.find();
+    const data = await bike_model_1.Bike.find().select({ createdAt: 0, updatedAt: 0 });
     if (!data || data.length < 1) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
@@ -28,7 +28,7 @@ const updateBikes = async (id, payload) => {
     const data = await bike_model_1.Bike.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,
-    });
+    }).select({ createdAt: 0, updatedAt: 0 });
     return data;
 };
 const deleteBikes = async (id) => {
@@ -36,7 +36,10 @@ const deleteBikes = async (id) => {
     if (!isBikeExist) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
-    const data = await bike_model_1.Bike.findByIdAndDelete(id);
+    const data = await bike_model_1.Bike.findByIdAndDelete(id).select({
+        createdAt: 0,
+        updatedAt: 0,
+    });
     return data;
 };
 exports.bikeServices = {
