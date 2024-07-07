@@ -72,7 +72,7 @@ next) => {
         success: false,
         message: message,
         errorMessages,
-        stack: config_1.default.node_ENV === 'development' ? err?.stack : null,
+        stack: config_1.default.node_ENV === 'development' ? err?.stack : 'error stack',
     });
 };
 exports.globalError = globalError;

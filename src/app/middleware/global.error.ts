@@ -72,6 +72,6 @@ export const globalError = (
     success: false,
     message: message,
     errorMessages,
-    stack: config.node_ENV === 'development' ? err?.stack : null,
+    stack: config.node_ENV === 'development' ? err?.stack : 'error stack',
   });
 };
