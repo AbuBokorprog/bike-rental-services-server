@@ -17,7 +17,7 @@ Welcome to the **Bike Rental Service** project! This service is designed to cate
 
 ## Live-Site
 
-[![Live-server-side]](https://bike-rental-service-flame.vercel.app/)
+[![Live-server-side]](https://bike-rental-service-abubokorprogs-projects.vercel.app/)
 
 ## Features
 
