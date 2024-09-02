@@ -30,6 +30,11 @@ const rentalsSchema = new Schema<TRentals>(
       type: Boolean,
       default: false,
     },
+    paymentStatus: {
+      type: String,
+      enum: ['Paid', 'Unpaid'],
+      default: 'Unpaid',
+    },
   },
   {
     timestamps: true,
