@@ -4,6 +4,7 @@ import { userRouter } from '../modules/users/users.route';
 import { bikeRouter } from '../modules/bike/bike.route';
 import { rentalsRoute } from '../modules/rentals/rentals.route';
 import { reviewsRoute } from '../modules/reviews/reviews.route';
+import { typesRoute } from '../modules/type/type.route';
 
 const router = express.Router();
 
@@ -27,6 +28,10 @@ const moduleRoute = [
   {
     path: '/reviews',
     route: reviewsRoute,
+  },
+  {
+    path: '/types',
+    route: typesRoute,
   },
 ];
 

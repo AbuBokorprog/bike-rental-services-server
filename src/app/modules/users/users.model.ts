@@ -29,6 +29,10 @@ const userSchema = new Schema<TUser>(
       enum: ['admin', 'user'],
       default: 'user',
     },
+    image: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

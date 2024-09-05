@@ -7,6 +7,7 @@ export interface TUser {
   phone: string;
   address: string;
   role: 'admin' | 'user';
+  image: string;
 }
 
 export type TUserRole = keyof typeof UserRole;
