@@ -4,7 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bikeServices = void 0;
+const QueryBuilder_1 = require("../../builder/QueryBuilder");
 const AppError_1 = require("../../errors/AppError");
+const bike_constants_1 = require("./bike.constants");
 const bike_model_1 = require("./bike.model");
 const http_status_1 = __importDefault(require("http-status"));
 const createBike = async (payload) => {
@@ -13,8 +15,14 @@ const createBike = async (payload) => {
 };
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 const retrieveAllBikes = async (query) => {
-    const data = await bike_model_1.Bike.find().select({ createdAt: 0, updatedAt: 0 });
-    if (!data || data.length < 1) {
+    const allBikes = new QueryBuilder_1.QueryBuilder(bike_model_1.Bike.find(), query)
+        .search(bike_constants_1.bikeSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .field();
+    const data = await allBikes.modelQuery;
+    if (!data) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     return data;

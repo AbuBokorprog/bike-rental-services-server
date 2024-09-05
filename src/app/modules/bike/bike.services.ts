@@ -1,4 +1,6 @@
+import { QueryBuilder } from '../../builder/QueryBuilder';
 import { AppError } from '../../errors/AppError';
+import { bikeSearchableFields } from './bike.constants';
 import { TBike } from './bike.interface';
 import { Bike } from './bike.model';
 import status from 'http-status';
@@ -10,8 +12,16 @@ const createBike = async (payload: TBike) => {
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 const retrieveAllBikes = async (query: any) => {
-  const data = await Bike.find().select({ createdAt: 0, updatedAt: 0 });
-  if (!data || data.length < 1) {
+  const allBikes = new QueryBuilder(Bike.find(), query)
+    .search(bikeSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .field();
+
+  const data = await allBikes.modelQuery;
+
+  if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
   return data;

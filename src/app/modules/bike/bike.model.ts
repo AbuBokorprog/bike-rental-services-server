@@ -77,10 +77,52 @@ const BikeSchema = new Schema<TBike>(
     ageGroup: String,
     condition: String,
     maintenanceHistory: String,
+    weight: {
+      type: Number,
+      required: true,
+    },
+    brakeType: {
+      type: String,
+      required: true,
+    },
+    ageGroup: {
+      type: String,
+      enum: ['Child', 'Adult'],
+      required: true,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
+    images: {
+      type: [{ type: String }],
+      required: true,
+    },
+    material: {
+      type: String,
+      required: true,
+    },
+    gearCount: {
+      type: Number,
+      required: true,
+    },
+    rentalRate: {
+      type: Number,
+    },
+    size: {
+      type: String,
+    },
+    suspension: {
+      type: String,
+      enum: ['Front', 'Rear', 'Full', 'None'],
+    },
+    type: {
+      type: Schema.ObjectId,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-export const Bike = model<TBike>('Bike', BikeSchema);
+export const Bike = model<TBike>('bike', BikeSchema);

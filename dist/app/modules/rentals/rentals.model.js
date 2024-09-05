@@ -30,6 +30,11 @@ const rentalsSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    paymentStatus: {
+        type: String,
+        enum: ['Paid', 'Unpaid'],
+        default: 'Unpaid',
+    },
 }, {
     timestamps: true,
 });
