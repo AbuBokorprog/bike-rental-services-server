@@ -26,10 +26,10 @@ const BikeSchema = new Schema<TBike>(
     },
     brand: { type: String, required: true },
     model: { type: String, required: true },
-    categories: {
-      type: String,
-      enum: ['mountain', 'road', 'hybrid', 'electric'],
+    type: {
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: 'type',
     },
     color: { type: String, required: true },
     size: { type: String, required: true },
@@ -74,50 +74,16 @@ const BikeSchema = new Schema<TBike>(
     weight: Number,
     material: String,
     accessoriesIncluded: [String],
-    ageGroup: String,
     condition: String,
     maintenanceHistory: String,
-    weight: {
-      type: Number,
-      required: true,
-    },
-    brakeType: {
-      type: String,
-      required: true,
-    },
     ageGroup: {
       type: String,
       enum: ['Child', 'Adult'],
       required: true,
     },
-    color: {
-      type: String,
-      required: true,
-    },
     images: {
       type: [{ type: String }],
       required: true,
-    },
-    material: {
-      type: String,
-      required: true,
-    },
-    gearCount: {
-      type: Number,
-      required: true,
-    },
-    rentalRate: {
-      type: Number,
-    },
-    size: {
-      type: String,
-    },
-    suspension: {
-      type: String,
-      enum: ['Front', 'Rear', 'Full', 'None'],
-    },
-    type: {
-      type: Schema.ObjectId,
     },
   },
   {
