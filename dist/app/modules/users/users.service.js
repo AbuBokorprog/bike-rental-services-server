@@ -8,7 +8,15 @@ const AppError_1 = require("../../errors/AppError");
 // import { TUser } from './users.interface';
 const users_model_1 = require("./users.model");
 const http_status_1 = __importDefault(require("http-status"));
-const retrieveAllUsers = async (payload) => {
+const http_status_2 = __importDefault(require("http-status"));
+const retrieveAllUsers = async () => {
+    const result = await users_model_1.userModel.find();
+    if (!result) {
+        throw new AppError_1.AppError(http_status_2.default.BAD_REQUEST, 'Retrieve all users failed!');
+    }
+    return result;
+};
+const retrieveMe = async (payload) => {
     const result = await users_model_1.userModel
         .find({ email: payload })
         .select({ password: 0 });
@@ -32,4 +40,5 @@ const updateProfile = async (email, payload) => {
 exports.userServices = {
     retrieveAllUsers,
     updateProfile,
+    retrieveMe,
 };

@@ -7,15 +7,21 @@ import { updateUserSignInValidationSchema } from './users.validation';
 const route = express.Router();
 
 route.get(
+  '/',
+  auth(UserRole.admin, UserRole.superAdmin),
+  userControllers.retrieveAllUsers,
+);
+
+route.get(
   '/me',
   auth(UserRole.admin, UserRole.user, UserRole.superAdmin),
-  userControllers.retrieveUser,
+  userControllers.retrieveMe,
 );
 
 route.put(
   '/me',
   auth(UserRole.admin, UserRole.user, UserRole.superAdmin),
   validationRequest(updateUserSignInValidationSchema),
-  userControllers.updateSingleUser,
+  userControllers.updateProfile,
 );
 export const userRouter = route;

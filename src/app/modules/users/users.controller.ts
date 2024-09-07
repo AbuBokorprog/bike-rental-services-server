@@ -3,10 +3,21 @@ import successResponse from '../../utils/successResponse';
 import { catchAsync } from '../../utils/catch.async';
 import httpStatus from 'http-status';
 
-const retrieveUser = catchAsync(async (req, res) => {
+const retrieveAllUsers = catchAsync(async (req, res) => {
+  const data = await userServices.retrieveAllUsers();
+
+  successResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Retrieve all Users!',
+    data,
+  });
+});
+
+const retrieveMe = catchAsync(async (req, res) => {
   const user = req.user;
 
-  const data = await userServices.retrieveAllUsers(user?.email);
+  const data = await userServices.retrieveMe(user?.email);
   successResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -15,7 +26,7 @@ const retrieveUser = catchAsync(async (req, res) => {
   });
 });
 
-const updateSingleUser = catchAsync(async (req, res) => {
+const updateProfile = catchAsync(async (req, res) => {
   const user = req.user;
   const body = req.body;
   const data = await userServices.updateProfile(user?.email, body);
@@ -28,6 +39,7 @@ const updateSingleUser = catchAsync(async (req, res) => {
 });
 
 export const userControllers = {
-  retrieveUser,
-  updateSingleUser,
+  retrieveAllUsers,
+  retrieveMe,
+  updateProfile,
 };

@@ -8,7 +8,6 @@ exports.createUserSignInValidationSchema = zod_1.z.object({
     password: zod_1.z.string(),
     phone: zod_1.z.string(),
     address: zod_1.z.string(),
-    role: zod_1.z.enum(['admin', 'user']),
     image: zod_1.z.string(),
 });
 exports.updateUserSignInValidationSchema = zod_1.z.object({
@@ -16,4 +15,5 @@ exports.updateUserSignInValidationSchema = zod_1.z.object({
     phone: zod_1.z.string().optional(),
     address: zod_1.z.string().optional(),
     image: zod_1.z.string().optional(),
+    role: zod_1.z.enum(['admin', 'user', 'super-admin']).optional(),
 });

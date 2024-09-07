@@ -4,8 +4,18 @@ import { AppError } from '../../errors/AppError';
 import { userModel } from './users.model';
 import status from 'http-status';
 import { TUser } from './users.interface';
+import httpStatus from 'http-status';
 
-const retrieveAllUsers = async (payload: JwtPayload) => {
+const retrieveAllUsers = async () => {
+  const result = await userModel.find();
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Retrieve all users failed!');
+  }
+  return result;
+};
+
+const retrieveMe = async (payload: JwtPayload) => {
   const result = await userModel
     .find({ email: payload })
     .select({ password: 0 });
@@ -33,4 +43,5 @@ const updateProfile = async (email: JwtPayload, payload: Partial<TUser>) => {
 export const userServices = {
   retrieveAllUsers,
   updateProfile,
+  retrieveMe,
 };

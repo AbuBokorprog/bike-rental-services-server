@@ -8,9 +8,18 @@ const users_service_1 = require("./users.service");
 const successResponse_1 = __importDefault(require("../../utils/successResponse"));
 const catch_async_1 = require("../../utils/catch.async");
 const http_status_1 = __importDefault(require("http-status"));
-const retrieveUser = (0, catch_async_1.catchAsync)(async (req, res) => {
+const retrieveAllUsers = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const data = await users_service_1.userServices.retrieveAllUsers();
+    (0, successResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Retrieve all Users!',
+        data,
+    });
+});
+const retrieveMe = (0, catch_async_1.catchAsync)(async (req, res) => {
     const user = req.user;
-    const data = await users_service_1.userServices.retrieveAllUsers(user?.email);
+    const data = await users_service_1.userServices.retrieveMe(user?.email);
     (0, successResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -18,7 +27,7 @@ const retrieveUser = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
-const updateSingleUser = (0, catch_async_1.catchAsync)(async (req, res) => {
+const updateProfile = (0, catch_async_1.catchAsync)(async (req, res) => {
     const user = req.user;
     const body = req.body;
     const data = await users_service_1.userServices.updateProfile(user?.email, body);
@@ -30,6 +39,7 @@ const updateSingleUser = (0, catch_async_1.catchAsync)(async (req, res) => {
     });
 });
 exports.userControllers = {
-    retrieveUser,
-    updateSingleUser,
+    retrieveAllUsers,
+    retrieveMe,
+    updateProfile,
 };
