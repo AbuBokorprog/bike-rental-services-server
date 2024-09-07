@@ -11,7 +11,7 @@ const route = express.Router();
 
 route.post(
   '/',
-  auth(UserRole.admin),
+  auth(UserRole.admin, UserRole.superAdmin),
   validationRequest(createBikeValidationSchema),
   bikeControllers.createBike,
 );
@@ -20,11 +20,15 @@ route.get('/', bikeControllers.retrieveAllBike);
 
 route.put(
   '/:id',
-  auth(UserRole.admin),
+  auth(UserRole.admin, UserRole.superAdmin),
   validationRequest(updateBikeValidationSchema),
   bikeControllers.updateBike,
 );
 
-route.delete('/:id', auth(UserRole.admin), bikeControllers.deleteBike);
+route.delete(
+  '/:id',
+  auth(UserRole.admin, UserRole.superAdmin),
+  bikeControllers.deleteBike,
+);
 
 export const bikeRouter = route;

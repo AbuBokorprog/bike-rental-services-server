@@ -20,12 +20,11 @@ const signUpUser = (0, catch_async_1.catchAsync)(async (req, res) => {
 });
 const loginUser = (0, catch_async_1.catchAsync)(async (req, res) => {
     const body = req.body;
-    const { token, data } = await auth_services_1.authServices.loginUser(body);
+    const data = await auth_services_1.authServices.loginUser(body);
     (0, successResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'User logged in successfully',
-        token: token,
         data,
     });
 });

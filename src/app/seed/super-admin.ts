@@ -2,7 +2,7 @@ import { userModel } from '../modules/users/users.model';
 
 const superAdmin = {
   name: 'Super Admin',
-  email: 'supar@admin.com',
+  email: 'suparadmin@gmail.com',
   password: 'superadmin@',
   phone: '01885236058',
   address: 'Uttara, Dhaka',

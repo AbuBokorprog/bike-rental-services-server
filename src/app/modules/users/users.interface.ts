@@ -6,7 +6,7 @@ export interface TUser {
   password: string;
   phone: string;
   address: string;
-  role: 'admin' | 'user';
+  role: 'super-admin ' | 'admin' | 'user';
   image: string;
 }
 

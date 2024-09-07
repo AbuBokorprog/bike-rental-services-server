@@ -8,17 +8,21 @@ const route = express.Router();
 
 route.post(
   '/',
-  auth(UserRole.admin, UserRole.user),
+  auth(UserRole.admin, UserRole.user, UserRole.superAdmin),
   validationRequest(createRentalsValidationSchema),
   rentalsController.createRental,
 );
 
 route.get(
   '/',
-  auth(UserRole.user, UserRole.admin),
+  auth(UserRole.user, UserRole.admin, UserRole.superAdmin),
   rentalsController.getAllRentals,
 );
 
-route.put('/:id/return', auth(UserRole.admin), rentalsController.returnBike);
+route.put(
+  '/:id/return',
+  auth(UserRole.admin, UserRole.superAdmin),
+  rentalsController.returnBike,
+);
 
 export const rentalsRoute = route;

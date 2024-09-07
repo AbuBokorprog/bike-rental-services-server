@@ -4,7 +4,7 @@ exports.seedSuperAdmin = void 0;
 const users_model_1 = require("../modules/users/users.model");
 const superAdmin = {
     name: 'Super Admin',
-    email: 'supar@admin.com',
+    email: 'suparadmin@gmail.com',
     password: 'superadmin@',
     phone: '01885236058',
     address: 'Uttara, Dhaka',
