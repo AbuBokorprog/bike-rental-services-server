@@ -11,6 +11,6 @@ const authMiddleware_1 = require("../../utils/authMiddleware");
 const validate_request_1 = require("../../utils/validate.request");
 const users_validation_1 = require("./users.validation");
 const route = express_1.default.Router();
-route.get('/me', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user), users_controller_1.userControllers.retrieveUser);
-route.put('/me', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user), (0, validate_request_1.validationRequest)(users_validation_1.updateUserSignInValidationSchema), users_controller_1.userControllers.updateSingleUser);
+route.get('/me', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user, users_constants_1.UserRole.superAdmin), users_controller_1.userControllers.retrieveUser);
+route.put('/me', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user, users_constants_1.UserRole.superAdmin), (0, validate_request_1.validationRequest)(users_validation_1.updateUserSignInValidationSchema), users_controller_1.userControllers.updateSingleUser);
 exports.userRouter = route;

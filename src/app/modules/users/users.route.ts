@@ -8,13 +8,13 @@ const route = express.Router();
 
 route.get(
   '/me',
-  auth(UserRole.admin, UserRole.user),
+  auth(UserRole.admin, UserRole.user, UserRole.superAdmin),
   userControllers.retrieveUser,
 );
 
 route.put(
   '/me',
-  auth(UserRole.admin, UserRole.user),
+  auth(UserRole.admin, UserRole.user, UserRole.superAdmin),
   validationRequest(updateUserSignInValidationSchema),
   userControllers.updateSingleUser,
 );
