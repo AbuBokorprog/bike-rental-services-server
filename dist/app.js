@@ -13,7 +13,7 @@ const not_found_error_1 = require("./app/middleware/not.found.error");
 const router_1 = __importDefault(require("./app/router"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: ['http://localhost:5173'], credentials: true }));
 // application routes
 app.use('/api', router_1.default);
 app.get('/', (req, res) => {
