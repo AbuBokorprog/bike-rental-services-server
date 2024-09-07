@@ -15,7 +15,6 @@ export interface TBike {
   size: string;
   availabilityStatus: boolean;
   rentalRate: number;
-  imageUrl: string;
   createdAt: Date;
   updatedAt: Date;
   engine?: string;
@@ -28,7 +27,6 @@ export interface TBike {
   warranty?: string;
   introductionYear?: string;
   registrationYear?: string;
-  minimumAge?: number;
   maximumSpeed?: string;
   suspensionFrontType?: string;
   suspensionFrontSize?: string;
