@@ -41,7 +41,7 @@ const createRentals = async (email, payload) => {
         if (!data) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental created failed!');
         }
-        const updateBike = await bike_model_1.Bike.findByIdAndUpdate(payload.bikeId, { isAvailable: false }, { new: true, runValidators: true, session });
+        const updateBike = await bike_model_1.Bike.findByIdAndUpdate(payload.bikeId, { isAvailable: true }, { new: true, runValidators: true, session });
         if (!updateBike) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Bike update failed!');
         }
@@ -59,7 +59,11 @@ const advancePayment = async (amount, id) => {
     const session = await (0, mongoose_1.startSession)();
     const isRentalBike = await rentals_model_1.rentals.findById(id);
     if (!isRentalBike) {
-        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, "The Rental bike is not exist!");
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The Rental bike is not exist!");
+    }
+    const bike = await bike_model_1.Bike.findById(isRentalBike?.bikeId);
+    if (!bike) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The Rental bike is not exist!");
     }
     try {
         session.startTransaction();
@@ -69,14 +73,13 @@ const advancePayment = async (amount, id) => {
         }
         isRentalBike.isAdvancePaymentPaid = true;
         isRentalBike.isConfirm = true;
-        isRentalBike.availabilityStatus = false;
         await isRentalBike.save({ session });
+        await bike_model_1.Bike.findByIdAndUpdate(bike?._id, { isAvailable: false }, { session, new: true });
         await session.commitTransaction();
         session.endSession();
         return advancePayment;
     }
     catch (error) {
-        console.log(error);
         await session.abortTransaction();
         session.endSession();
         throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
@@ -92,7 +95,7 @@ const returnBike = async (id) => {
     //   find bike by id
     const rentalsBike = await bike_model_1.Bike.findById(bikeId);
     if (!rentalsBike) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'Bike No Data Found');
     }
     const pricePerHour = rentalsBike?.pricePerHour;
     const startTime = new Date(currentRentals?.startTime);
@@ -103,11 +106,12 @@ const returnBike = async (id) => {
     const differenceInHours = (differenceTime / (1000 * 60 * 60)).toFixed(2);
     //   total cost
     const totalCost = (Number(differenceInHours) * Number(pricePerHour)).toFixed(2);
+    const duePayment = (Number(totalCost) - currentRentals.advancePayment).toFixed();
     const session = await (0, mongoose_1.startSession)();
     try {
         session.startTransaction();
         const updateRental = await rentals_model_1.rentals
-            .findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true }, { new: true, runValidators: true, session })
+            .findByIdAndUpdate(id, { returnTime, totalCost, isReturned: true, duePayment }, { new: true, runValidators: true, session })
             .select({ createdAt: 0, updatedAt: 0 });
         if (!updateRental) {
             throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental update failed!');

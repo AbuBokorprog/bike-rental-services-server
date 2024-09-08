@@ -58,7 +58,7 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
 
     const updateBike = await Bike.findByIdAndUpdate(
       payload.bikeId,
-      { isAvailable: false },
+      { isAvailable: true },
       { new: true, runValidators: true, session },
     );
     if (!updateBike) {
@@ -79,7 +79,13 @@ const advancePayment = async(amount: number, id: string) => {
   const isRentalBike = await rentals.findById(id)
 
   if(!isRentalBike){
-    throw new AppError(status.BAD_REQUEST, "The Rental bike is not exist!")
+    throw new AppError(status.NOT_FOUND, "The Rental bike is not exist!")
+  }
+
+  const bike = await Bike.findById(isRentalBike?.bikeId)
+
+  if(!bike){
+    throw new AppError(status.NOT_FOUND, "The Rental bike is not exist!")
   }
 
   try {
@@ -93,16 +99,15 @@ const advancePayment = async(amount: number, id: string) => {
 
     isRentalBike.isAdvancePaymentPaid = true;
     isRentalBike.isConfirm = true;
-    isRentalBike.availabilityStatus = false;
     
     await isRentalBike.save({session})
 
-  
+    await Bike.findByIdAndUpdate(bike?._id, {isAvailable: false}, {session, new: true})
+
     await session.commitTransaction();
     session.endSession();
     return advancePayment
   } catch (error) {
-    console.log(error)
     await session.abortTransaction();
     session.endSession()
     throw new AppError(500, "Advance payment failed! please try again!")
@@ -123,7 +128,7 @@ const returnBike = async (id: string) => {
   const rentalsBike = await Bike.findById(bikeId);
 
   if (!rentalsBike) {
-    throw new AppError(status.NOT_FOUND, 'No Data Found');
+    throw new AppError(status.NOT_FOUND, 'Bike No Data Found');
   }
 
   const pricePerHour = rentalsBike?.pricePerHour;
@@ -140,6 +145,8 @@ const returnBike = async (id: string) => {
     2,
   );
 
+  const duePayment = (Number(totalCost) - currentRentals.advancePayment).toFixed()
+
   const session = await startSession();
 
   try {
@@ -147,7 +154,7 @@ const returnBike = async (id: string) => {
     const updateRental = await rentals
       .findByIdAndUpdate(
         id,
-        { returnTime, totalCost, isReturned: true },
+        { returnTime, totalCost, isReturned: true, duePayment },
         { new: true, runValidators: true, session },
       )
       .select({ createdAt: 0, updatedAt: 0 });

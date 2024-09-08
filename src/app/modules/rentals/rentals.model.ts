@@ -45,10 +45,6 @@ const rentalsSchema = new Schema<TRentals>(
       type:Boolean,
       default: false
     },
-    availabilityStatus: {
-      type: Boolean,
-      default: true
-    },
     isAdvancePaymentPaid: {
       type: Boolean,
       default: false

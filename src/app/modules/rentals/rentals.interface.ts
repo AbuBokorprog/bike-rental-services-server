@@ -11,6 +11,5 @@ export interface TRentals {
   paymentStatus: 'Paid' | 'Unpaid';
   isReturned: boolean;
   isConfirm: boolean,
-  availabilityStatus: boolean,
   isAdvancePaymentPaid: boolean
 }
