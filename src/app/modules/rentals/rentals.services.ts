@@ -74,6 +74,42 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
   }
 };
 
+const advancePayment = async(amount: number, id: string) => {
+  const session = await startSession()
+  const isRentalBike = await rentals.findById(id)
+
+  if(!isRentalBike){
+    throw new AppError(status.BAD_REQUEST, "The Rental bike is not exist!")
+  }
+
+  try {
+    session.startTransaction()
+
+    const advancePayment = await rentals.findByIdAndUpdate(id, {advancePayment: amount}, {session, new: true})
+
+    if(!advancePayment){
+      throw new AppError(500, "Advance payment failed! please try again!")
+    }
+
+    isRentalBike.isAdvancePaymentPaid = true;
+    isRentalBike.isConfirm = true;
+    isRentalBike.availabilityStatus = false;
+    
+    await isRentalBike.save({session})
+
+  
+    await session.commitTransaction();
+    session.endSession();
+    return advancePayment
+  } catch (error) {
+    console.log(error)
+    await session.abortTransaction();
+    session.endSession()
+    throw new AppError(500, "Advance payment failed! please try again!")
+  }
+
+}
+
 const returnBike = async (id: string) => {
   // find current rentals
   const currentRentals = await rentals.findById(id);
@@ -158,4 +194,4 @@ const retrieveRentals = async (email: JwtPayload) => {
   }
   return data;
 };
-export const rentalsServices = { createRentals, returnBike, retrieveRentals };
+export const rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment };

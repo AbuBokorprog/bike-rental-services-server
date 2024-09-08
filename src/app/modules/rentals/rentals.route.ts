@@ -13,6 +13,8 @@ route.post(
   rentalsController.createRental,
 );
 
+route.patch("/:id", rentalsController.advancePayment)
+
 route.get(
   '/',
   auth(UserRole.user, UserRole.admin, UserRole.superAdmin),

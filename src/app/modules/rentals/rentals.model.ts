@@ -35,6 +35,24 @@ const rentalsSchema = new Schema<TRentals>(
       enum: ['Paid', 'Unpaid'],
       default: 'Unpaid',
     },
+    advancePayment: {
+      type: Number,
+    },
+    duePayment: {
+      type: Number
+    },
+    isConfirm: {
+      type:Boolean,
+      default: false
+    },
+    availabilityStatus: {
+      type: Boolean,
+      default: true
+    },
+    isAdvancePaymentPaid: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true,

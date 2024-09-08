@@ -15,6 +15,19 @@ const createRental = catchAsync(async (req, res) => {
   });
 });
 
+const advancePayment = catchAsync(async(req, res) => {
+  const {amount} = req.body
+  const {id} = req.params
+  const data = await rentalsServices.advancePayment(amount, id)
+
+  successResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Advance payment successfully!',
+    data,
+  });
+})
+
 const getAllRentals = catchAsync(async (req, res) => {
   const user = req.user;
   const data = await rentalsServices.retrieveRentals(user?.email);
@@ -40,4 +53,4 @@ const returnBike = catchAsync(async (req, res) => {
   });
 });
 
-export const rentalsController = { createRental, getAllRentals, returnBike };
+export const rentalsController = { createRental, getAllRentals, returnBike, advancePayment };

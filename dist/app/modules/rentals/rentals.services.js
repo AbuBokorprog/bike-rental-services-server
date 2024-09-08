@@ -55,6 +55,33 @@ const createRentals = async (email, payload) => {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental create failed!');
     }
 };
+const advancePayment = async (amount, id) => {
+    const session = await (0, mongoose_1.startSession)();
+    const isRentalBike = await rentals_model_1.rentals.findById(id);
+    if (!isRentalBike) {
+        throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, "The Rental bike is not exist!");
+    }
+    try {
+        session.startTransaction();
+        const advancePayment = await rentals_model_1.rentals.findByIdAndUpdate(id, { advancePayment: amount }, { session, new: true });
+        if (!advancePayment) {
+            throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
+        }
+        isRentalBike.isAdvancePaymentPaid = true;
+        isRentalBike.isConfirm = true;
+        isRentalBike.availabilityStatus = false;
+        await isRentalBike.save({ session });
+        await session.commitTransaction();
+        session.endSession();
+        return advancePayment;
+    }
+    catch (error) {
+        console.log(error);
+        await session.abortTransaction();
+        session.endSession();
+        throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
+    }
+};
 const returnBike = async (id) => {
     // find current rentals
     const currentRentals = await rentals_model_1.rentals.findById(id);
@@ -112,4 +139,4 @@ const retrieveRentals = async (email) => {
     }
     return data;
 };
-exports.rentalsServices = { createRentals, returnBike, retrieveRentals };
+exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment };
