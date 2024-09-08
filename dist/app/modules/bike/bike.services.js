@@ -22,10 +22,11 @@ const retrieveAllBikes = async (query) => {
         .paginate()
         .field();
     const data = await allBikes.modelQuery;
+    const meta = await allBikes.countTotal();
     if (!data) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
-    return data;
+    return { data, meta };
 };
 const retrieveSingleBike = async (id) => {
     const data = bike_model_1.Bike.findById(id);

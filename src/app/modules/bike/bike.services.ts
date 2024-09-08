@@ -20,12 +20,13 @@ const retrieveAllBikes = async (query: any) => {
     .field();
 
   const data = await allBikes.modelQuery;
+  const meta = await allBikes.countTotal();
 
   if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
-  return data;
+  return {data, meta};
 };
 
 const retrieveSingleBike = async (id: string) => {
