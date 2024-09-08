@@ -11,7 +11,7 @@ const rentalsSchema = new Schema<TRentals>(
     bikeId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Bike',
+      ref: 'bike',
     },
     startTime: {
       type: Date,

@@ -11,7 +11,7 @@ const rentalsSchema = new mongoose_1.Schema({
     bikeId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'Bike',
+        ref: 'bike',
     },
     startTime: {
         type: Date,
