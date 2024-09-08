@@ -27,6 +27,16 @@ const retrieveAllBike = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
+const retrieveSingleBike = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { id } = req.params;
+    const data = await bike_services_1.bikeServices.retrieveSingleBike(id);
+    (0, successResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Bike retrieved successfully',
+        data,
+    });
+});
 const updateBike = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;
     const body = req.body;
@@ -51,6 +61,7 @@ const deleteBike = (0, catch_async_1.catchAsync)(async (req, res) => {
 exports.bikeControllers = {
     createBike,
     retrieveAllBike,
+    retrieveSingleBike,
     updateBike,
     deleteBike,
 };

@@ -16,6 +16,8 @@ route.post(
   bikeControllers.createBike,
 );
 
+route.get('/:id', bikeControllers.retrieveSingleBike);
+
 route.get('/', bikeControllers.retrieveAllBike);
 
 route.put(

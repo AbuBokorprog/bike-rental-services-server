@@ -24,6 +24,13 @@ const retrieveAllBikes = async (query: any) => {
   if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
+
+  return data;
+};
+
+const retrieveSingleBike = async (id: string) => {
+  const data = Bike.findById(id);
+
   return data;
 };
 
@@ -58,6 +65,7 @@ const deleteBikes = async (id: string) => {
 export const bikeServices = {
   createBike,
   retrieveAllBikes,
+  retrieveSingleBike,
   updateBikes,
   deleteBikes,
 };

@@ -27,6 +27,10 @@ const retrieveAllBikes = async (query) => {
     }
     return data;
 };
+const retrieveSingleBike = async (id) => {
+    const data = bike_model_1.Bike.findById(id);
+    return data;
+};
 const updateBikes = async (id, payload) => {
     // check is bike exist?
     const isBikeExist = await bike_model_1.Bike.findById(id);
@@ -53,6 +57,7 @@ const deleteBikes = async (id) => {
 exports.bikeServices = {
     createBike,
     retrieveAllBikes,
+    retrieveSingleBike,
     updateBikes,
     deleteBikes,
 };
