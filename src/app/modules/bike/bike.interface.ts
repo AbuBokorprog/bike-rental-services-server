@@ -8,15 +8,11 @@ export interface TBike {
   isAvailable: boolean;
   cc: number;
   description: string;
-  bikeId: string;
   brand: string;
   model: string;
   color: string;
   size: string;
   availabilityStatus: boolean;
-  rentalRate: number;
-  createdAt: Date;
-  updatedAt: Date;
   engine?: string;
   carburetionType?: string;
   engineType?: string;
@@ -24,9 +20,7 @@ export interface TBike {
   boreStroke?: string;
   compressionRatio?: string;
   identification?: string;
-  warranty?: string;
   introductionYear?: string;
-  registrationYear?: string;
   maximumSpeed?: string;
   suspensionFrontType?: string;
   suspensionFrontSize?: string;
@@ -46,17 +40,12 @@ export interface TBike {
   length?: string;
   width?: string;
   wheelbase?: string;
-  dryWeight?: string;
-  wetWeight?: string;
-  packagingWeight?: string;
-  packagingDimensions?: string;
   gearCount?: number;
   brakeType?: string;
   suspension?: 'front' | 'rear' | 'full' | 'none';
   weight?: number;
   material?: string;
-  accessoriesIncluded?: string[];
+  accessoriesIncluded?: string;
   ageGroup?: string;
   condition?: string;
-  maintenanceHistory?: string;
 }

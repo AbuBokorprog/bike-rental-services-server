@@ -38,7 +38,7 @@ class QueryBuilder {
         return this;
     }
     field() {
-        const fields = (this?.query?.fields).split(',').join('-') || '-__v';
+        const fields = this?.query?.fields?.split(',').join('-') || '-__v';
         this.modelQuery = this.modelQuery.select(fields);
         return this;
     }

@@ -59,7 +59,7 @@ export class QueryBuilder<T> {
 
   field() {
     const fields =
-      (this?.query?.fields as string).split(',').join('-') || '-__v';
+      (this?.query?.fields as string)?.split(',').join('-') || '-__v';
 
     this.modelQuery = this.modelQuery.select(fields);
 
