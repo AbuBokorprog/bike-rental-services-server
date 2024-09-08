@@ -6,7 +6,9 @@ import { rentals } from './rentals.model';
 import { AppError } from '../../errors/AppError';
 import { JwtPayload } from 'jsonwebtoken';
 import { userModel } from '../users/users.model';
+import { QueryBuilder } from '../../builder/QueryBuilder';
 
+// Create rental
 const createRentals = async (email: JwtPayload, payload: TRentals) => {
   const session = await startSession();
   // get specific user
@@ -74,6 +76,7 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
   }
 };
 
+// Advance Payment
 const advancePayment = async(amount: number, id: string) => {
   const session = await startSession()
   const isRentalBike = await rentals.findById(id)
@@ -115,6 +118,7 @@ const advancePayment = async(amount: number, id: string) => {
 
 }
 
+// Return rentals
 const returnBike = async (id: string) => {
   // find current rentals
   const currentRentals = await rentals.findById(id);
@@ -187,6 +191,27 @@ const returnBike = async (id: string) => {
   }
 };
 
+const paymentRental = async(id:string)=>{
+  // const session = await startSession()
+  const isExistRental = await rentals.findById(id)
+
+  if(!isExistRental){
+    throw new AppError(status.NOT_FOUND, "The rental not exist!");
+  }
+  try {
+    // session.startTransaction()
+    isExistRental.paymentStatus = "Paid";
+    isExistRental.duePayment = 0
+
+    await isExistRental.save()
+    return isExistRental
+  } catch (error) {
+    throw new AppError(status.FORBIDDEN, "Payment failed!")
+  //  await session.abortTransaction();
+  //  await session.endSession()
+  }
+}
+
 const retrieveRentals = async (email: JwtPayload) => {
   const user = await userModel.findOne({ email: email });
   if (!user) {
@@ -195,10 +220,21 @@ const retrieveRentals = async (email: JwtPayload) => {
 
   const data = await rentals
     .find({ userId: user?._id })
-    .select({ createdAt: 0, updatedAt: 0 });
-  if (!data || data.length < 1) {
+    .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+  if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
   return data;
 };
-export const rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const retrieveAllRentals = async(query: any) => {
+  const allRentals = new QueryBuilder(rentals.find().populate("bikeId"), query).search(["bikeId"]).filter().sort().paginate().field();
+
+  const result = await allRentals.modelQuery;
+  const meta = await allRentals.countTotal()
+
+  return {result, meta}
+}
+
+export const rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental };

@@ -10,6 +10,8 @@ const bike_model_1 = require("../bike/bike.model");
 const rentals_model_1 = require("./rentals.model");
 const AppError_1 = require("../../errors/AppError");
 const users_model_1 = require("../users/users.model");
+const QueryBuilder_1 = require("../../builder/QueryBuilder");
+// Create rental
 const createRentals = async (email, payload) => {
     const session = await (0, mongoose_1.startSession)();
     // get specific user
@@ -55,6 +57,7 @@ const createRentals = async (email, payload) => {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Rental create failed!');
     }
 };
+// Advance Payment
 const advancePayment = async (amount, id) => {
     const session = await (0, mongoose_1.startSession)();
     const isRentalBike = await rentals_model_1.rentals.findById(id);
@@ -85,6 +88,7 @@ const advancePayment = async (amount, id) => {
         throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
     }
 };
+// Return rentals
 const returnBike = async (id) => {
     // find current rentals
     const currentRentals = await rentals_model_1.rentals.findById(id);
@@ -130,6 +134,25 @@ const returnBike = async (id) => {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Return rental failed!');
     }
 };
+const paymentRental = async (id) => {
+    // const session = await startSession()
+    const isExistRental = await rentals_model_1.rentals.findById(id);
+    if (!isExistRental) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The rental not exist!");
+    }
+    try {
+        // session.startTransaction()
+        isExistRental.paymentStatus = "Paid";
+        isExistRental.duePayment = 0;
+        await isExistRental.save();
+        return isExistRental;
+    }
+    catch (error) {
+        throw new AppError_1.AppError(http_status_1.default.FORBIDDEN, "Payment failed!");
+        //  await session.abortTransaction();
+        //  await session.endSession()
+    }
+};
 const retrieveRentals = async (email) => {
     const user = await users_model_1.userModel.findOne({ email: email });
     if (!user) {
@@ -137,10 +160,17 @@ const retrieveRentals = async (email) => {
     }
     const data = await rentals_model_1.rentals
         .find({ userId: user?._id })
-        .select({ createdAt: 0, updatedAt: 0 });
-    if (!data || data.length < 1) {
+        .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+    if (!data) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
     return data;
 };
-exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const retrieveAllRentals = async (query) => {
+    const allRentals = new QueryBuilder_1.QueryBuilder(rentals_model_1.rentals.find().populate("bikeId"), query).search(["bikeId"]).filter().sort().paginate().field();
+    const result = await allRentals.modelQuery;
+    const meta = await allRentals.countTotal();
+    return { result, meta };
+};
+exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental };
