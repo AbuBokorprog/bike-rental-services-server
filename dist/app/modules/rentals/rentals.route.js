@@ -14,6 +14,7 @@ const route = express_1.default.Router();
 route.post('/', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.user, users_constants_1.UserRole.superAdmin), (0, validate_request_1.validationRequest)(rentals_validation_1.createRentalsValidationSchema), rentals_controller_1.rentalsController.createRental);
 route.patch("/:id", (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin, users_constants_1.UserRole.user), rentals_controller_1.rentalsController.advancePayment);
 route.get("/", (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), rentals_controller_1.rentalsController.retrieveAllRentals);
+route.get('/:id', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin, users_constants_1.UserRole.user), rentals_controller_1.rentalsController.retrieveSingleRentals);
 route.get('/my', (0, authMiddleware_1.auth)(users_constants_1.UserRole.user, users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), rentals_controller_1.rentalsController.getAllRentals);
 route.put('/:id/return', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), rentals_controller_1.rentalsController.returnBike);
 route.put("/:id/payment", (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin, users_constants_1.UserRole.user), rentals_controller_1.rentalsController.paymentRental);

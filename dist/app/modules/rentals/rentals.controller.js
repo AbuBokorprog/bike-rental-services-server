@@ -36,7 +36,17 @@ const retrieveAllRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
     (0, successResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Advance payment successfully!',
+        message: 'Retrieve successfully!',
+        data,
+    });
+});
+const retrieveSingleRentals = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { id } = req.params;
+    const data = await rentals_services_1.rentalsServices.retrieveSingleRentals(id);
+    (0, successResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Retrieve successfully!',
         data,
     });
 });
@@ -71,4 +81,4 @@ const paymentRental = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
-exports.rentalsController = { createRental, getAllRentals, returnBike, advancePayment, retrieveAllRentals, paymentRental };
+exports.rentalsController = { createRental, getAllRentals, returnBike, advancePayment, retrieveAllRentals, paymentRental, retrieveSingleRentals };

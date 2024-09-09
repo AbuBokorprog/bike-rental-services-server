@@ -17,6 +17,8 @@ route.patch("/:id",auth(UserRole.admin, UserRole.superAdmin, UserRole.user), ren
 
 route.get("/", auth(UserRole.admin, UserRole.superAdmin), rentalsController.retrieveAllRentals)
 
+route.get('/:id',auth(UserRole.admin, UserRole.superAdmin, UserRole.user), rentalsController.retrieveSingleRentals)
+
 route.get(
   '/my',
   auth(UserRole.user, UserRole.admin, UserRole.superAdmin),

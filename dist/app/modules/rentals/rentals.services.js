@@ -166,6 +166,15 @@ const retrieveRentals = async (email) => {
     }
     return data;
 };
+const retrieveSingleRentals = async (id) => {
+    const data = await rentals_model_1.rentals
+        .findById(id)
+        .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+    if (!data) {
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
+    return data;
+};
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const retrieveAllRentals = async (query) => {
     const allRentals = new QueryBuilder_1.QueryBuilder(rentals_model_1.rentals.find().populate("bikeId"), query).search(["bikeId"]).filter().sort().paginate().field();
@@ -173,4 +182,4 @@ const retrieveAllRentals = async (query) => {
     const meta = await allRentals.countTotal();
     return { result, meta };
 };
-exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental };
+exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental, retrieveSingleRentals };
