@@ -215,14 +215,14 @@ const paymentRental = async(id:string)=>{
 const retrieveRentals = async (email: JwtPayload) => {
   const user = await userModel.findOne({ email: email });
   if (!user) {
-    throw new AppError(status.NOT_FOUND, 'No Data Found');
+    throw new AppError(status.NOT_FOUND, 'User not found');
   }
 
   const data = await rentals
     .find({ userId: user?._id })
     .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
   if (!data) {
-    throw new AppError(status.NOT_FOUND, 'No Data Found');
+    throw new AppError(status.NOT_FOUND, "User's Rental Bike not found");
   }
   return data;
 };
@@ -232,7 +232,7 @@ const retrieveSingleRentals = async (id: string) => {
   const data = await rentals
     .findById(id)
     .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
-    
+
   if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }

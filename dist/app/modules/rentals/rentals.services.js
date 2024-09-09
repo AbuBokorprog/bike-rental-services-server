@@ -156,13 +156,13 @@ const paymentRental = async (id) => {
 const retrieveRentals = async (email) => {
     const user = await users_model_1.userModel.findOne({ email: email });
     if (!user) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'User not found');
     }
     const data = await rentals_model_1.rentals
         .find({ userId: user?._id })
         .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
     if (!data) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "User's Rental Bike not found");
     }
     return data;
 };
