@@ -39,16 +39,16 @@ const rentalsSchema = new mongoose_1.Schema({
         type: Number,
     },
     duePayment: {
-        type: Number
+        type: Number,
     },
     isConfirm: {
         type: Boolean,
-        default: false
+        default: false,
     },
     isAdvancePaymentPaid: {
         type: Boolean,
-        default: false
-    }
+        default: false,
+    },
 }, {
     timestamps: true,
 });

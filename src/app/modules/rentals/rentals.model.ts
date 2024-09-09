@@ -39,16 +39,16 @@ const rentalsSchema = new Schema<TRentals>(
       type: Number,
     },
     duePayment: {
-      type: Number
+      type: Number,
     },
     isConfirm: {
-      type:Boolean,
-      default: false
+      type: Boolean,
+      default: false,
     },
     isAdvancePaymentPaid: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -15,10 +15,10 @@ const createRental = catchAsync(async (req, res) => {
   });
 });
 
-const advancePayment = catchAsync(async(req, res) => {
-  const {amount} = req.body
-  const {id} = req.params
-  const data = await rentalsServices.advancePayment(amount, id)
+const advancePayment = catchAsync(async (req, res) => {
+  const { amount } = req.body;
+  const { id } = req.params;
+  const data = await rentalsServices.advancePayment(amount, id);
 
   successResponse(res, {
     statusCode: status.OK,
@@ -26,11 +26,11 @@ const advancePayment = catchAsync(async(req, res) => {
     message: 'Advance payment successfully!',
     data,
   });
-})
+});
 
 // all rentals
-const retrieveAllRentals = catchAsync(async(req, res) => {
-  const data = await rentalsServices.retrieveAllRentals(req.query)
+const retrieveAllRentals = catchAsync(async (req, res) => {
+  const data = await rentalsServices.retrieveAllRentals(req.query);
 
   successResponse(res, {
     statusCode: status.OK,
@@ -38,11 +38,11 @@ const retrieveAllRentals = catchAsync(async(req, res) => {
     message: 'Retrieve successfully!',
     data,
   });
-})
+});
 
-const retrieveSingleRentals = catchAsync(async(req, res) => {
-  const {id} = req.params;
-  const data = await rentalsServices.retrieveSingleRentals(id)
+const retrieveSingleRentals = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = await rentalsServices.retrieveSingleRentals(id);
 
   successResponse(res, {
     statusCode: status.OK,
@@ -50,8 +50,7 @@ const retrieveSingleRentals = catchAsync(async(req, res) => {
     message: 'Retrieve successfully!',
     data,
   });
-
-})
+});
 
 // specific user's rentals
 const getAllRentals = catchAsync(async (req, res) => {
@@ -79,9 +78,9 @@ const returnBike = catchAsync(async (req, res) => {
   });
 });
 
-const paymentRental = catchAsync(async(req, res) => {
-  const {id} = req.params;
-  const data = await rentalsServices.paymentRental(id)
+const paymentRental = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = await rentalsServices.paymentRental(id);
 
   successResponse(res, {
     statusCode: status.OK,
@@ -89,6 +88,14 @@ const paymentRental = catchAsync(async(req, res) => {
     message: 'Payment successfully!',
     data,
   });
-})
+});
 
-export const rentalsController = { createRental, getAllRentals, returnBike, advancePayment, retrieveAllRentals, paymentRental, retrieveSingleRentals };
+export const rentalsController = {
+  createRental,
+  getAllRentals,
+  returnBike,
+  advancePayment,
+  retrieveAllRentals,
+  paymentRental,
+  retrieveSingleRentals,
+};

@@ -5,7 +5,7 @@ type TMeta = {
   limit: number;
   total: number;
   totalPage: number;
-}
+};
 
 type Data<T> = {
   statusCode: number;
@@ -13,7 +13,7 @@ type Data<T> = {
   message: string;
   token?: string;
   data: T;
-  meta?:TMeta
+  meta?: TMeta;
 };
 
 const successResponse = <T>(res: Response, data: Data<T>) => {
@@ -23,7 +23,7 @@ const successResponse = <T>(res: Response, data: Data<T>) => {
     message: data?.message,
     token: data.token,
     data: data?.data,
-    meta: data?.meta
+    meta: data?.meta,
   });
 };
 

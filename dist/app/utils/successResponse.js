@@ -7,7 +7,7 @@ const successResponse = (res, data) => {
         message: data?.message,
         token: data.token,
         data: data?.data,
-        meta: data?.meta
+        meta: data?.meta,
     });
 };
 exports.default = successResponse;

@@ -26,7 +26,7 @@ const retrieveAllBikes = async (query: any) => {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
   }
 
-  return {data, meta};
+  return { data, meta };
 };
 
 const retrieveSingleBike = async (id: string) => {

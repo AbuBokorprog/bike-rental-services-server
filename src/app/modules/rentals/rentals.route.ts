@@ -13,11 +13,23 @@ route.post(
   rentalsController.createRental,
 );
 
-route.patch("/:id",auth(UserRole.admin, UserRole.superAdmin, UserRole.user), rentalsController.advancePayment)
+route.patch(
+  '/:id',
+  auth(UserRole.admin, UserRole.superAdmin, UserRole.user),
+  rentalsController.advancePayment,
+);
 
-route.get("/", auth(UserRole.admin, UserRole.superAdmin), rentalsController.retrieveAllRentals)
+route.get(
+  '/',
+  auth(UserRole.admin, UserRole.superAdmin),
+  rentalsController.retrieveAllRentals,
+);
 
-route.get('/:id',auth(UserRole.admin, UserRole.superAdmin, UserRole.user), rentalsController.retrieveSingleRentals)
+route.get(
+  '/:id',
+  auth(UserRole.admin, UserRole.superAdmin, UserRole.user),
+  rentalsController.retrieveSingleRentals,
+);
 
 route.get(
   '/user/my',
@@ -31,6 +43,10 @@ route.put(
   rentalsController.returnBike,
 );
 
-route.put("/:id/payment", auth(UserRole.admin, UserRole.superAdmin, UserRole.user), rentalsController.paymentRental)
+route.put(
+  '/:id/payment',
+  auth(UserRole.admin, UserRole.superAdmin, UserRole.user),
+  rentalsController.paymentRental,
+);
 
 export const rentalsRoute = route;

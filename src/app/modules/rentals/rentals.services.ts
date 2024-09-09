@@ -77,46 +77,53 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
 };
 
 // Advance Payment
-const advancePayment = async(amount: number, id: string) => {
-  const session = await startSession()
-  const isRentalBike = await rentals.findById(id)
+const advancePayment = async (amount: number, id: string) => {
+  const session = await startSession();
+  const isRentalBike = await rentals.findById(id);
 
-  if(!isRentalBike){
-    throw new AppError(status.NOT_FOUND, "The Rental bike is not exist!")
+  if (!isRentalBike) {
+    throw new AppError(status.NOT_FOUND, 'The Rental bike is not exist!');
   }
 
-  const bike = await Bike.findById(isRentalBike?.bikeId)
+  const bike = await Bike.findById(isRentalBike?.bikeId);
 
-  if(!bike){
-    throw new AppError(status.NOT_FOUND, "The Rental bike is not exist!")
+  if (!bike) {
+    throw new AppError(status.NOT_FOUND, 'The Rental bike is not exist!');
   }
 
   try {
-    session.startTransaction()
+    session.startTransaction();
 
-    const advancePayment = await rentals.findByIdAndUpdate(id, {advancePayment: amount}, {session, new: true})
+    const advancePayment = await rentals.findByIdAndUpdate(
+      id,
+      { advancePayment: amount },
+      { session, new: true },
+    );
 
-    if(!advancePayment){
-      throw new AppError(500, "Advance payment failed! please try again!")
+    if (!advancePayment) {
+      throw new AppError(500, 'Advance payment failed! please try again!');
     }
 
     isRentalBike.isAdvancePaymentPaid = true;
     isRentalBike.isConfirm = true;
-    
-    await isRentalBike.save({session})
 
-    await Bike.findByIdAndUpdate(bike?._id, {isAvailable: false}, {session, new: true})
+    await isRentalBike.save({ session });
+
+    await Bike.findByIdAndUpdate(
+      bike?._id,
+      { isAvailable: false },
+      { session, new: true },
+    );
 
     await session.commitTransaction();
     session.endSession();
-    return advancePayment
+    return advancePayment;
   } catch (error) {
     await session.abortTransaction();
-    session.endSession()
-    throw new AppError(500, "Advance payment failed! please try again!")
+    session.endSession();
+    throw new AppError(500, 'Advance payment failed! please try again!');
   }
-
-}
+};
 
 // Return rentals
 const returnBike = async (id: string) => {
@@ -149,7 +156,9 @@ const returnBike = async (id: string) => {
     2,
   );
 
-  const duePayment = (Number(totalCost) - currentRentals.advancePayment).toFixed()
+  const duePayment = (
+    Number(totalCost) - currentRentals.advancePayment
+  ).toFixed();
 
   const session = await startSession();
 
@@ -191,26 +200,26 @@ const returnBike = async (id: string) => {
   }
 };
 
-const paymentRental = async(id:string)=>{
+const paymentRental = async (id: string) => {
   // const session = await startSession()
-  const isExistRental = await rentals.findById(id)
+  const isExistRental = await rentals.findById(id);
 
-  if(!isExistRental){
-    throw new AppError(status.NOT_FOUND, "The rental not exist!");
+  if (!isExistRental) {
+    throw new AppError(status.NOT_FOUND, 'The rental not exist!');
   }
   try {
     // session.startTransaction()
-    isExistRental.paymentStatus = "Paid";
-    isExistRental.duePayment = 0
+    isExistRental.paymentStatus = 'Paid';
+    isExistRental.duePayment = 0;
 
-    await isExistRental.save()
-    return isExistRental
+    await isExistRental.save();
+    return isExistRental;
   } catch (error) {
-    throw new AppError(status.FORBIDDEN, "Payment failed!")
-  //  await session.abortTransaction();
-  //  await session.endSession()
+    throw new AppError(status.FORBIDDEN, 'Payment failed!');
+    //  await session.abortTransaction();
+    //  await session.endSession()
   }
-}
+};
 
 const retrieveRentals = async (email: JwtPayload) => {
   const user = await userModel.findOne({ email: email });
@@ -220,7 +229,8 @@ const retrieveRentals = async (email: JwtPayload) => {
 
   const data = await rentals
     .find({ userId: user?._id })
-    .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+    .select({ createdAt: 0, updatedAt: 0 })
+    .populate('bikeId');
   if (!data) {
     throw new AppError(status.NOT_FOUND, "User's Rental Bike not found");
   }
@@ -228,10 +238,10 @@ const retrieveRentals = async (email: JwtPayload) => {
 };
 
 const retrieveSingleRentals = async (id: string) => {
-
   const data = await rentals
     .findById(id)
-    .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+    .select({ createdAt: 0, updatedAt: 0 })
+    .populate('bikeId');
 
   if (!data) {
     throw new AppError(status.NOT_FOUND, 'No Data Found');
@@ -240,13 +250,26 @@ const retrieveSingleRentals = async (id: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const retrieveAllRentals = async(query: any) => {
-  const allRentals = new QueryBuilder(rentals.find().populate("bikeId"), query).search(["bikeId"]).filter().sort().paginate().field();
+const retrieveAllRentals = async (query: any) => {
+  const allRentals = new QueryBuilder(rentals.find().populate('bikeId'), query)
+    .search(['bikeId'])
+    .filter()
+    .sort()
+    .paginate()
+    .field();
 
   const result = await allRentals.modelQuery;
-  const meta = await allRentals.countTotal()
+  const meta = await allRentals.countTotal();
 
-  return {result, meta}
-}
+  return { result, meta };
+};
 
-export const rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental ,retrieveSingleRentals};
+export const rentalsServices = {
+  createRentals,
+  returnBike,
+  retrieveRentals,
+  advancePayment,
+  retrieveAllRentals,
+  paymentRental,
+  retrieveSingleRentals,
+};

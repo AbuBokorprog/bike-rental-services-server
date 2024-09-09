@@ -62,17 +62,17 @@ const advancePayment = async (amount, id) => {
     const session = await (0, mongoose_1.startSession)();
     const isRentalBike = await rentals_model_1.rentals.findById(id);
     if (!isRentalBike) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The Rental bike is not exist!");
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'The Rental bike is not exist!');
     }
     const bike = await bike_model_1.Bike.findById(isRentalBike?.bikeId);
     if (!bike) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The Rental bike is not exist!");
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'The Rental bike is not exist!');
     }
     try {
         session.startTransaction();
         const advancePayment = await rentals_model_1.rentals.findByIdAndUpdate(id, { advancePayment: amount }, { session, new: true });
         if (!advancePayment) {
-            throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
+            throw new AppError_1.AppError(500, 'Advance payment failed! please try again!');
         }
         isRentalBike.isAdvancePaymentPaid = true;
         isRentalBike.isConfirm = true;
@@ -85,7 +85,7 @@ const advancePayment = async (amount, id) => {
     catch (error) {
         await session.abortTransaction();
         session.endSession();
-        throw new AppError_1.AppError(500, "Advance payment failed! please try again!");
+        throw new AppError_1.AppError(500, 'Advance payment failed! please try again!');
     }
 };
 // Return rentals
@@ -138,17 +138,17 @@ const paymentRental = async (id) => {
     // const session = await startSession()
     const isExistRental = await rentals_model_1.rentals.findById(id);
     if (!isExistRental) {
-        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "The rental not exist!");
+        throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'The rental not exist!');
     }
     try {
         // session.startTransaction()
-        isExistRental.paymentStatus = "Paid";
+        isExistRental.paymentStatus = 'Paid';
         isExistRental.duePayment = 0;
         await isExistRental.save();
         return isExistRental;
     }
     catch (error) {
-        throw new AppError_1.AppError(http_status_1.default.FORBIDDEN, "Payment failed!");
+        throw new AppError_1.AppError(http_status_1.default.FORBIDDEN, 'Payment failed!');
         //  await session.abortTransaction();
         //  await session.endSession()
     }
@@ -160,7 +160,8 @@ const retrieveRentals = async (email) => {
     }
     const data = await rentals_model_1.rentals
         .find({ userId: user?._id })
-        .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+        .select({ createdAt: 0, updatedAt: 0 })
+        .populate('bikeId');
     if (!data) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, "User's Rental Bike not found");
     }
@@ -169,7 +170,8 @@ const retrieveRentals = async (email) => {
 const retrieveSingleRentals = async (id) => {
     const data = await rentals_model_1.rentals
         .findById(id)
-        .select({ createdAt: 0, updatedAt: 0 }).populate("bikeId");
+        .select({ createdAt: 0, updatedAt: 0 })
+        .populate('bikeId');
     if (!data) {
         throw new AppError_1.AppError(http_status_1.default.NOT_FOUND, 'No Data Found');
     }
@@ -177,9 +179,22 @@ const retrieveSingleRentals = async (id) => {
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const retrieveAllRentals = async (query) => {
-    const allRentals = new QueryBuilder_1.QueryBuilder(rentals_model_1.rentals.find().populate("bikeId"), query).search(["bikeId"]).filter().sort().paginate().field();
+    const allRentals = new QueryBuilder_1.QueryBuilder(rentals_model_1.rentals.find().populate('bikeId'), query)
+        .search(['bikeId'])
+        .filter()
+        .sort()
+        .paginate()
+        .field();
     const result = await allRentals.modelQuery;
     const meta = await allRentals.countTotal();
     return { result, meta };
 };
-exports.rentalsServices = { createRentals, returnBike, retrieveRentals, advancePayment, retrieveAllRentals, paymentRental, retrieveSingleRentals };
+exports.rentalsServices = {
+    createRentals,
+    returnBike,
+    retrieveRentals,
+    advancePayment,
+    retrieveAllRentals,
+    paymentRental,
+    retrieveSingleRentals,
+};

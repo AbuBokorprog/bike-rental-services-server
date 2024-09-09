@@ -81,4 +81,12 @@ const paymentRental = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
-exports.rentalsController = { createRental, getAllRentals, returnBike, advancePayment, retrieveAllRentals, paymentRental, retrieveSingleRentals };
+exports.rentalsController = {
+    createRental,
+    getAllRentals,
+    returnBike,
+    advancePayment,
+    retrieveAllRentals,
+    paymentRental,
+    retrieveSingleRentals,
+};
