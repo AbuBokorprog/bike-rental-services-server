@@ -25,5 +25,7 @@ route.put(
   userControllers.updateProfile,
 );
 
+route.put("/:id", auth(UserRole.admin, UserRole.superAdmin), userControllers.promoteUser)
+
 route.delete("/:id",auth(UserRole.admin, UserRole.superAdmin), userControllers.deleteUser)
 export const userRouter = route;

@@ -38,6 +38,16 @@ const updateProfile = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
+const promoteUser = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { id } = req.params;
+    const data = await users_service_1.userServices.promoteUser(id);
+    (0, successResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User updated successfully!',
+        data,
+    });
+});
 const deleteUser = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;
     const data = await users_service_1.userServices.deleteUser(id);
@@ -52,5 +62,6 @@ exports.userControllers = {
     retrieveAllUsers,
     retrieveMe,
     updateProfile,
-    deleteUser
+    deleteUser,
+    promoteUser
 };

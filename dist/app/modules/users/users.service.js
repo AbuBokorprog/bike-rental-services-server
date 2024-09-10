@@ -37,6 +37,21 @@ const updateProfile = async (email, payload) => {
     }
     return result;
 };
+const promoteUser = async (id) => {
+    const userInfo = await users_model_1.userModel.findById(id);
+    let role = "admin";
+    if (userInfo?.role === "user") {
+        role = "admin";
+    }
+    else if (userInfo?.role === "admin") {
+        role = "super-admin";
+    }
+    else {
+        role = "user";
+    }
+    const result = await users_model_1.userModel.findByIdAndUpdate(id, { role: role }, { new: true, runValidators: true });
+    return result;
+};
 const deleteUser = async (id) => {
     const result = await users_model_1.userModel.findByIdAndDelete(id);
     if (!result) {
@@ -48,5 +63,6 @@ exports.userServices = {
     retrieveAllUsers,
     updateProfile,
     retrieveMe,
-    deleteUser
+    deleteUser,
+    promoteUser
 };

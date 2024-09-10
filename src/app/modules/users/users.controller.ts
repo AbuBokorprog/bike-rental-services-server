@@ -38,6 +38,19 @@ const updateProfile = catchAsync(async (req, res) => {
   });
 });
 
+const promoteUser = catchAsync(async(req, res) => {
+  const {id} = req.params
+  const data = await userServices.promoteUser(id)
+
+  successResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully!',
+    data,
+  });
+
+})
+
 const deleteUser = catchAsync(async(req, res) => {
   const {id} = req.params;
   const data = await userServices.deleteUser(id);
@@ -55,5 +68,6 @@ export const userControllers = {
   retrieveAllUsers,
   retrieveMe,
   updateProfile,
-  deleteUser
+  deleteUser,
+  promoteUser
 };

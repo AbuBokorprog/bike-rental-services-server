@@ -40,6 +40,25 @@ const updateProfile = async (email: JwtPayload, payload: Partial<TUser>) => {
   return result;
 };
 
+const promoteUser = async(id:string)=> {
+
+  const userInfo = await userModel.findById(id)
+
+  let role = "admin"
+
+  if(userInfo?.role === "user"){
+    role = "admin"
+  }else if (userInfo?.role === "admin"){
+    role = "super-admin"
+  }else{
+    role = "user"
+  }
+
+  const result = await userModel.findByIdAndUpdate(id, {role: role}, {new: true, runValidators: true})
+
+  return result
+}
+
 const deleteUser = async(id:string) => {
   const result = await userModel.findByIdAndDelete(id);
 
@@ -53,5 +72,6 @@ export const userServices = {
   retrieveAllUsers,
   updateProfile,
   retrieveMe,
-  deleteUser
+  deleteUser,
+  promoteUser
 };
