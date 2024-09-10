@@ -24,4 +24,6 @@ route.put(
   validationRequest(updateUserSignInValidationSchema),
   userControllers.updateProfile,
 );
+
+route.delete("/:id",auth(UserRole.admin, UserRole.superAdmin), userControllers.deleteUser)
 export const userRouter = route;

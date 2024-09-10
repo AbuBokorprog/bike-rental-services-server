@@ -37,8 +37,16 @@ const updateProfile = async (email, payload) => {
     }
     return result;
 };
+const deleteUser = async (id) => {
+    const result = await users_model_1.userModel.findByIdAndDelete(id);
+    if (!result) {
+        throw new AppError_1.AppError(http_status_2.default.BAD_REQUEST, "User delete Failed!");
+    }
+    return result;
+};
 exports.userServices = {
     retrieveAllUsers,
     updateProfile,
     retrieveMe,
+    deleteUser
 };

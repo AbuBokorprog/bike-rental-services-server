@@ -40,8 +40,18 @@ const updateProfile = async (email: JwtPayload, payload: Partial<TUser>) => {
   return result;
 };
 
+const deleteUser = async(id:string) => {
+  const result = await userModel.findByIdAndDelete(id);
+
+  if(!result){
+    throw new AppError(httpStatus.BAD_REQUEST,"User delete Failed!")
+  }
+  return result
+}
+
 export const userServices = {
   retrieveAllUsers,
   updateProfile,
   retrieveMe,
+  deleteUser
 };
