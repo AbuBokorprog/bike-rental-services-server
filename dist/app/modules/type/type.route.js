@@ -11,6 +11,7 @@ const users_constants_1 = require("../users/users.constants");
 const route = express_1.default.Router();
 route.post('/', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), type_controller_1.typeController.createTypes);
 route.get('/', type_controller_1.typeController.retrieveAllTypes);
+route.get("/:id", type_controller_1.typeController.retrieveSingleTypes);
 route.put('/:id', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), type_controller_1.typeController.updateTypes);
 route.delete('/:id', (0, authMiddleware_1.auth)(users_constants_1.UserRole.admin, users_constants_1.UserRole.superAdmin), type_controller_1.typeController.deleteTypes);
 exports.typesRoute = route;

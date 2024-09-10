@@ -26,6 +26,16 @@ const retrieveAllTypes = (0, catch_async_1.catchAsync)(async (req, res) => {
         data,
     });
 });
+const retrieveSingleTypes = (0, catch_async_1.catchAsync)(async (req, res) => {
+    const { id } = req.params;
+    const data = await type_services_1.typeServices.retrieveSingleTypes(id);
+    (0, successResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Type retrieve successfully!',
+        data,
+    });
+});
 const updateTypes = (0, catch_async_1.catchAsync)(async (req, res) => {
     const { id } = req.params;
     const data = await type_services_1.typeServices.updateTypes(id, req.body);
@@ -51,4 +61,5 @@ exports.typeController = {
     retrieveAllTypes,
     updateTypes,
     deleteTypes,
+    retrieveSingleTypes
 };

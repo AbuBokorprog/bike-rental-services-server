@@ -18,6 +18,10 @@ const retrieveAllTypes = async () => {
     const result = await type_model_1.Types.find();
     return result;
 };
+const retrieveSingleTypes = async (id) => {
+    const result = await type_model_1.Types.findById(id);
+    return result;
+};
 const updateTypes = async (id, payload) => {
     const result = await type_model_1.Types.findByIdAndUpdate(id, { payload });
     if (!result) {
@@ -34,4 +38,5 @@ exports.typeServices = {
     retrieveAllTypes,
     updateTypes,
     deleteTypes,
+    retrieveSingleTypes
 };

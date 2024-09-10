@@ -19,6 +19,12 @@ const retrieveAllTypes = async () => {
   return result;
 };
 
+const retrieveSingleTypes = async(id:string)=> {
+  const result = await Types.findById(id)
+
+  return result
+}
+
 const updateTypes = async (id: string, payload: Partial<TTypes>) => {
   const result = await Types.findByIdAndUpdate(id, { payload });
 
@@ -40,4 +46,5 @@ export const typeServices = {
   retrieveAllTypes,
   updateTypes,
   deleteTypes,
+  retrieveSingleTypes
 };

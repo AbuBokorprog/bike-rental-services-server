@@ -25,6 +25,17 @@ const retrieveAllTypes = catchAsync(async (req, res) => {
   });
 });
 
+const retrieveSingleTypes = catchAsync(async (req, res) => {
+  const {id} = req.params
+  const data = await typeServices.retrieveSingleTypes(id)
+  successResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Type retrieve successfully!',
+    data,
+  });
+})
+
 const updateTypes = catchAsync(async (req, res) => {
   const { id } = req.params;
   const data = await typeServices.updateTypes(id, req.body);
@@ -53,4 +64,5 @@ export const typeController = {
   retrieveAllTypes,
   updateTypes,
   deleteTypes,
+  retrieveSingleTypes
 };

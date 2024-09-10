@@ -9,12 +9,17 @@ route.post(
   auth(UserRole.admin, UserRole.superAdmin),
   typeController.createTypes,
 );
+
 route.get('/', typeController.retrieveAllTypes);
+
+route.get("/:id", typeController.retrieveSingleTypes)
+
 route.put(
   '/:id',
   auth(UserRole.admin, UserRole.superAdmin),
   typeController.updateTypes,
 );
+
 route.delete(
   '/:id',
   auth(UserRole.admin, UserRole.superAdmin),
