@@ -23,7 +23,10 @@ const retrieveSingleTypes = async (id) => {
     return result;
 };
 const updateTypes = async (id, payload) => {
-    const result = await type_model_1.Types.findByIdAndUpdate(id, { payload });
+    const result = await type_model_1.Types.findByIdAndUpdate(id, {
+        name: payload.name,
+        image: payload.image,
+    }, { new: true, runValidators: true });
     if (!result) {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Type updated failed!');
     }
@@ -38,5 +41,5 @@ exports.typeServices = {
     retrieveAllTypes,
     updateTypes,
     deleteTypes,
-    retrieveSingleTypes
+    retrieveSingleTypes,
 };
