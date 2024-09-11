@@ -9,7 +9,12 @@ import router from './app/router';
 const app: Application = express();
 
 app.use(express.json());
-app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://rentmyride-theta.vercel.app'],
+    credentials: true,
+  }),
+);
 
 // application routes
 
