@@ -13,4 +13,8 @@ exports.default = {
     node_ENV: `${process.env.NODE_ENV}`,
     jwt_secret: `${process.env.JWT_SECRET}`,
     expires_in: process.env.EXPIRES_IN,
+    paymentInitial: process.env.BASE_URL,
+    storeId: process.env.STORE_ID,
+    signatureKey: process.env.SIGNATURE_KEY,
+    validationUrl: process.env.VALIDATION_URL,
 };

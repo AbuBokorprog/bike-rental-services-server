@@ -12,4 +12,5 @@ export interface TRentals {
   isReturned: boolean;
   isConfirm: boolean;
   isAdvancePaymentPaid: boolean;
+  tran_id: string;
 }

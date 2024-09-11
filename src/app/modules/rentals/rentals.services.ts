@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { startSession } from 'mongoose';
 import status from 'http-status';
 import { Bike } from '../bike/bike.model';
@@ -7,10 +8,11 @@ import { AppError } from '../../errors/AppError';
 import { JwtPayload } from 'jsonwebtoken';
 import { userModel } from '../users/users.model';
 import { QueryBuilder } from '../../builder/QueryBuilder';
+import { PaymentUtils } from '../payment/paymentUtils';
+import httpStatus from 'http-status';
 
 // Create rental
 const createRentals = async (email: JwtPayload, payload: TRentals) => {
-  const session = await startSession();
   // get specific user
   const user = await userModel.findOne({ email: email });
 
@@ -48,80 +50,20 @@ const createRentals = async (email: JwtPayload, payload: TRentals) => {
   }
 
   try {
-    session.startTransaction();
-
     payload.userId = user?._id;
-
-    const data = await rentals.create([payload], { session });
+    payload.advancePayment = 100;
+    payload.tran_id = `tsx-${user?.name}-${Date.now()}`;
+    const data = await rentals.create(payload);
 
     if (!data) {
       throw new AppError(status.BAD_REQUEST, 'Rental created failed!');
     }
 
-    const updateBike = await Bike.findByIdAndUpdate(
-      payload.bikeId,
-      { isAvailable: true },
-      { new: true, runValidators: true, session },
-    );
-    if (!updateBike) {
-      throw new AppError(status.BAD_REQUEST, 'Bike update failed!');
-    }
-    await session.commitTransaction();
-    session.endSession();
-    return data;
+    const payment = await PaymentUtils(data.advancePayment, user, data.tran_id);
+
+    return payment;
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     throw new AppError(status.BAD_REQUEST, 'Rental create failed!');
-  }
-};
-
-// Advance Payment
-const advancePayment = async (amount: number, id: string) => {
-  const session = await startSession();
-  const isRentalBike = await rentals.findById(id);
-
-  if (!isRentalBike) {
-    throw new AppError(status.NOT_FOUND, 'The Rental bike is not exist!');
-  }
-
-  const bike = await Bike.findById(isRentalBike?.bikeId);
-
-  if (!bike) {
-    throw new AppError(status.NOT_FOUND, 'The Rental bike is not exist!');
-  }
-
-  try {
-    session.startTransaction();
-
-    const advancePayment = await rentals.findByIdAndUpdate(
-      id,
-      { advancePayment: amount },
-      { session, new: true },
-    );
-
-    if (!advancePayment) {
-      throw new AppError(500, 'Advance payment failed! please try again!');
-    }
-
-    isRentalBike.isAdvancePaymentPaid = true;
-    isRentalBike.isConfirm = true;
-
-    await isRentalBike.save({ session });
-
-    await Bike.findByIdAndUpdate(
-      bike?._id,
-      { isAvailable: false },
-      { session, new: true },
-    );
-
-    await session.commitTransaction();
-    session.endSession();
-    return advancePayment;
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw new AppError(500, 'Advance payment failed! please try again!');
   }
 };
 
@@ -203,6 +145,11 @@ const returnBike = async (id: string) => {
 const paymentRental = async (id: string) => {
   // const session = await startSession()
   const isExistRental = await rentals.findById(id);
+  const user = await userModel.findById(isExistRental?.userId);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+  }
 
   if (!isExistRental) {
     throw new AppError(status.NOT_FOUND, 'The rental not exist!');
@@ -212,8 +159,13 @@ const paymentRental = async (id: string) => {
     isExistRental.paymentStatus = 'Paid';
     isExistRental.duePayment = 0;
 
-    await isExistRental.save();
-    return isExistRental;
+    const payment = await PaymentUtils(
+      isExistRental.duePayment,
+      user,
+      isExistRental.tran_id,
+    );
+
+    return payment;
   } catch (error) {
     throw new AppError(status.FORBIDDEN, 'Payment failed!');
     //  await session.abortTransaction();
@@ -268,7 +220,6 @@ export const rentalsServices = {
   createRentals,
   returnBike,
   retrieveRentals,
-  advancePayment,
   retrieveAllRentals,
   paymentRental,
   retrieveSingleRentals,

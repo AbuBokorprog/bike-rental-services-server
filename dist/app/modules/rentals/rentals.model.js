@@ -49,6 +49,9 @@ const rentalsSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    tran_id: {
+        type: String,
+    },
 }, {
     timestamps: true,
 });
