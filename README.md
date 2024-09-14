@@ -1,6 +1,6 @@
-# Bike Rental Service
+# Rent My Ride
 
-Welcome to the **Bike Rental Service** project! This service is designed to cater to both tourists and locals, allowing them to rent bikes easily and efficiently. The application provides secure authentication, rental management, and detailed cost calculations for bike rentals based on hourly usage.
+Welcome to the **Rent My Ride** project! This service is designed to cater to both tourists and locals, allowing them to rent bikes easily and efficiently. The application provides secure authentication, rental management, and detailed cost calculations for bike rentals based on hourly usage.
 
 ## Table of Contents
 
@@ -11,6 +11,9 @@ Welcome to the **Bike Rental Service** project! This service is designed to cate
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
+- [Types of Bikes](#types-of-bikes)
+- [Bike Comparison](#bike-comparison)
+- [Payments](#payments)
 - [Database Schema](#database-schema)
 - [Contributing](#contributing)
 - [License](#license)
@@ -28,6 +31,8 @@ Welcome to the **Bike Rental Service** project! This service is designed to cate
 - **User Profile Management:** Users can view and update their profiles.
 - **View Rental History:** Users can see a list of their rented bikes and their rental details.
 - **Admin Bike Management:** Admins can add, update, and delete bikes in the system.
+- **Compare Bikes:** Users can compare different bike models based on price, features, and specifications.
+- **Payments Integration:** Users can securely pay for rentals using online payment methods like aamarpay.
 
 ## Technology Stack
 
@@ -40,6 +45,7 @@ The following technologies are used in the project:
 - **Zod:** TypeScript-first schema declaration and validation library.
 - **JWT:** JSON Web Token used for securely transmitting information between parties as a JSON object.
 - **bcrypt:** Library to help hash passwords.
+- **aamarpay:** A payment processing platform used for secure transactions.
 
 ## Installation
 
@@ -68,6 +74,7 @@ To set up the project locally, follow these steps:
    node_ENV= //development or production
    JWT_ACCESS_SECRET= //jwt_secret_key
    EXPIRES_IN= //expires_in
+   aamarpay_SECRET_KEY= // your aamarpay secret key
    ```
 
 4. **Run the server:**
@@ -94,32 +101,10 @@ Once the server is running, you can interact with the API using a tool like Post
   POST /api/auth/signup
   ```
 
-  **Body:**
-
-  ```json
-  {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "phone": "1234567890",
-    "address": "123 Main St, Anytown",
-    "role": "admin"
-  }
-  ```
-
 - **Login a user:**
 
   ```http
   POST /api/auth/login
-  ```
-
-  **Body:**
-
-  ```json
-  {
-    "email": "john.doe@example.com",
-    "password": "securepassword"
-  }
   ```
 
 ### User Profile
@@ -130,33 +115,6 @@ Once the server is running, you can interact with the API using a tool like Post
   GET /api/users/me
   ```
 
-  **Headers:**
-
-  ```http
-  Authorization: Bearer jwt_token
-  ```
-
-- **Update user profile:**
-
-  ```http
-  PUT /api/users/me
-  ```
-
-  **Headers:**
-
-  ```http
-  Authorization: Bearer jwt_token
-  ```
-
-  **Body:**
-
-  ```json
-  {
-    "name": "John Updated",
-    "phone": "0987654321"
-  }
-  ```
-
 ### Bikes
 
 - **Create a new bike (Admin only):**
@@ -165,62 +123,10 @@ Once the server is running, you can interact with the API using a tool like Post
   POST /api/bikes
   ```
 
-  **Headers:**
-
-  ```http
-  Authorization: Bearer jwt_token
-  ```
-
-  **Body:**
-
-  ```json
-  {
-    "name": "Mountain Bike",
-    "description": "A durable mountain bike for rough terrains.",
-    "pricePerHour": 15,
-    "cc": 250,
-    "year": 2022,
-    "model": "X1",
-    "brand": "Yamaha"
-  }
-  ```
-
 - **Get all bikes:**
 
   ```http
   GET /api/bikes
-  ```
-
-- **Update bike details (Admin only):**
-
-  ```http
-  PUT /api/bikes/:id
-  ```
-
-  **Headers:**
-
-  ```http
-  Authorization: Bearer jwt_token
-  ```
-
-  **Body:**
-
-  ```json
-  {
-    "pricePerHour": 20
-  }
-  ```
-
-- **Delete a bike (Admin only):**
-
-  ```http
-  DELETE /api/bikes/:id
-  ```
-
-  **Headers:**
-
-  ```http
-  Authorization: Bearer jwt_token
   ```
 
 ### Rentals
@@ -231,6 +137,21 @@ Once the server is running, you can interact with the API using a tool like Post
   POST /api/rentals
   ```
 
+- **Return a rented bike and calculate the cost (Admin Only):**
+
+  ```http
+  POST /api/rentals/id/return
+  ```
+
+### Payments
+
+- **Create a payment:**
+
+  ```http
+  POST /api/payments/success-payment
+  POST /api/payments/failed-payment
+  ```
+
   **Headers:**
 
   ```http
@@ -241,41 +162,96 @@ Once the server is running, you can interact with the API using a tool like Post
 
   ```json
   {
-    "bikeId": "60df5f8b2f8fb814b56fa181",
-    "startTime": "2023-06-08T10:00:00Z"
+    "amount": 1000, // amount in smallest currency unit (e.g., cents for USD)
+    "currency": "BDT"
   }
   ```
 
-- **Return a rented bike and calculate the cost (Admin Only):**
+- **Complete a payment (Aamar PAY integration):**
 
   ```http
-  POST /api/rentals/id/return
+  POST /api/payments
   ```
 
-  **Headers:**
+## Types of Bikes
 
-  ```http
-  Authorization: Bearer jwt_token
-  ```
+Users can choose from a variety of bike types available for rent:
 
-  **Body:**
-  No Data
+1. **Mountain Bikes:**
 
-- **Get all rentals:**
+   - Ideal for off-road riding and rough terrains.
+   - Sturdy frame with shock absorbers.
+   - **Price per hour:** $15.
 
-  ```http
-  GET /api/rentals
-  ```
+2. **Road Bikes:**
 
-  **Headers:**
+   - Designed for smooth city roads and highways.
+   - Lightweight frame and thin tires for speed.
+   - **Price per hour:** $12.
 
-  ```http
-  Authorization: Bearer jwt_token
-  ```
+3. **Electric Bikes:**
+
+   - Battery-powered bikes for effortless riding.
+   - Suitable for long distances or uphill rides.
+   - **Price per hour:** $20.
+
+4. **Track Bikes:**
+
+   - Designed for racing or velodrome riding.
+   - Single gear, lightweight build for speed.
+   - **Price per hour:** $18.
+
+5. **Hybrid Bikes:**
+   - Combines features of both road and mountain bikes.
+   - Suitable for versatile riding conditions.
+   - **Price per hour:** $14.
+
+## Bike Comparison
+
+Users can compare various bikes based on features like:
+
+- **Price per Hour:** Allows users to compare rental costs across different bike types.
+- **Engine Capacity (for motorbikes):** Compare bike power in terms of CC for motorbikes.
+- **Frame Type:** Users can compare the bike’s build quality.
+- **Weight:** Compare bike weights to choose based on user preference.
+
+Example API for comparison:
+
+```http
+GET /api/bikes/compare?bike1=mountain&bike2=road
+```
+
+Response:
+
+```json
+{
+  "bike1": {
+    "name": "Mountain Bike",
+    "pricePerHour": 15,
+    "cc": 0,
+    "weight": "14kg",
+    "type": "Off-road"
+  },
+  "bike2": {
+    "name": "Road Bike",
+    "pricePerHour": 12,
+    "cc": 0,
+    "weight": "9kg",
+    "type": "On-road"
+  }
+}
+```
+
+## Payments
+
+The system uses **aamarpay** for secure payments. Users can pay for their rentals through the platform after selecting a bike and renting it. Payments are processed using credit or debit cards.
+
+- **aamarpay API Integration:** The payment flow is handled using aamarpay's payment intent API to ensure secure transactions.
+- **Payment Confirmation:** Once a payment is successfully completed, the system will update the rental status.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code address to the existing style and that you have added tests for any new functionality.
+Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code addresses the existing style and that you have added tests for any new functionality.
 
 ## License
 
