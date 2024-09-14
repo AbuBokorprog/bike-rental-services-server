@@ -15,7 +15,11 @@ const createComparison = async (payload) => {
     return result;
 };
 const retrieveAllComparison = async () => {
-    const result = await comparison_model_1.comparison.find().populate('userId').populate('bikeId');
+    const result = await comparison_model_1.comparison
+        .find()
+        .populate('userId')
+        .populate('bikeId')
+        .select({ __v: 0, description: 0, createdAt: 0, updatedAt: 0 });
     if (!result) {
         throw new AppError_1.AppError(http_status_1.default.BAD_REQUEST, 'Retrieve coupon failed!');
     }

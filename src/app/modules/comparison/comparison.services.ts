@@ -14,7 +14,11 @@ const createComparison = async (payload: TComparison) => {
 };
 
 const retrieveAllComparison = async () => {
-  const result = await comparison.find().populate('userId').populate('bikeId');
+  const result = await comparison
+    .find()
+    .populate('userId')
+    .populate('bikeId')
+    .select({ __v: 0, description: 0, createdAt: 0, updatedAt: 0 });
 
   if (!result) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Retrieve coupon failed!');
